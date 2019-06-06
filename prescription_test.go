@@ -23,7 +23,7 @@ func TestPricription(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 
 	assert.Equal(t, 200, rr.Code, "OK response is expected")
-	expected := "success"
+	expected := "failed"
 	if rr.Body.String() != expected {
 		t.Errorf("alert send failed")
 	}
