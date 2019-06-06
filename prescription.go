@@ -12,6 +12,7 @@ func scriptHandler(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		fmt.Fprintf(w, "Only post methods supported.")
 	case "POST":
+		log.Println("called!")
 		cmdStr := "thumbnail.sh"
 		cmd := exec.Command("/bin/sh", cmdStr)
 		_, err := cmd.Output()
@@ -20,6 +21,7 @@ func scriptHandler(w http.ResponseWriter, r *http.Request) {
 			println(err.Error())
 			return
 		}
+		fmt.Fprintf(w, "success")
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		fmt.Fprintf(w, "I can't do that.")
