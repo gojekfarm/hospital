@@ -1,1 +1,0 @@
-brew services restart haproxy

@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPricription(t *testing.T) {
+func TestPrescription(t *testing.T) {
 	var jsonStr = []byte(`{"alertname": "test"}`)
 	req, err := http.NewRequest("POST", "/script", bytes.NewBuffer(jsonStr))
 	if err != nil {

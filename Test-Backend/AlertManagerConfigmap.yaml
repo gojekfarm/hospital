@@ -1,0 +1,10 @@
+global:
+route:
+    receiver: webhook_demo
+    group_wait: 10s
+    repeat_interval: 10s
+
+receivers:
+  - name: webhook_demo
+    webhook_configs:
+    - url: "http://localhost:8088/accept"
