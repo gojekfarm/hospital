@@ -23,13 +23,13 @@ func scriptHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(respString.Alertname + " called!")
 
 		db, err := sql.Open("mysql",
-			"root:toor@tcp(127.0.0.1:3306)/solution_map")
+			"root:toor@tcp(127.0.0.1:3306)/Doctor")
 		if err != nil {
 			log.Fatal(err)
 		}
 		defer db.Close()
 		var command string
-		err = db.QueryRow("select command from operations_mapping where alertname = ? ",
+		err = db.QueryRow("select script from Mapping where alert_type = ? ",
 			respString.Alertname).Scan(&command)
 		if err != nil {
 			command = "none"

@@ -40,7 +40,7 @@ func TestAlertReceiver(t *testing.T) {
 
 func TestDatabase(t *testing.T) {
 	db, err := sql.Open("mysql",
-		"root:toor@tcp(127.0.0.1:3306)/secretory")
+		"root:toor@tcp(127.0.0.1:3306)/Doctor")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,7 +51,7 @@ func TestDatabase(t *testing.T) {
 	var receivedObject received
 	json.Unmarshal(jsonStr, &receivedObject)
 
-	insert, err := db.Query("INSERT INTO alerts(alertname, startsAT, address, status) VALUES ( ? , ? , ? ,?)",
+	insert, err := db.Query("INSERT INTO Incidents(alertname, startsAT, address, status) VALUES ( ? , ? , ? ,?)",
 		receivedObject.Alerts[0].Labels.Alertname, receivedObject.Alerts[0].StartsAt, receivedObject.Alerts[0].Labels.Instance, receivedObject.Alerts[0].Status)
 
 	// if there is an error inserting, handle it
@@ -62,7 +62,7 @@ func TestDatabase(t *testing.T) {
 	defer insert.Close()
 
 	var id int
-	err = db.QueryRow("select id from alerts where alertname = ? and startsAT = ? and address = ?",
+	err = db.QueryRow("select id from Incidents where alertname = ? and startsAT = ? and address = ?",
 		receivedObject.Alerts[0].Labels.Alertname, receivedObject.Alerts[0].StartsAt, receivedObject.Alerts[0].Labels.Instance).Scan(&id)
 	if err != nil {
 		t.Errorf("database test failed!")
