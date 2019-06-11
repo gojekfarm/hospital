@@ -19,8 +19,6 @@ func acceptHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Only post methods supported.")
 	case "POST":
 		filename := "alert_api.txt"
-		body, _ := ioutil.ReadAll(r.Body)
-		ioutil.WriteFile(filename, body, 0600)
 		var receivedObject received
 		json.Unmarshal(body, &receivedObject)
 		db, err := sql.Open("mysql",
