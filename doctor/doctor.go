@@ -5,20 +5,27 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"../dbprovider"
 )
 
-// ReceptionHandler recieves alerts
+// DoctorHandler recieves alerts
 func DoctorHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 		body, _ := ioutil.ReadAll(r.Body)
-		var alert_type AlertName
-		json.Unmarshal(body, &receivedObject)
-		// resp := alertReceiver(receivedObject)
-		// fmt.Fprintf(w, resp)
+		var alertType AlertName
+		json.Unmarshal(body, &alertType)
+		resp := scriptGenerator(alertType.Alertname)
+		fmt.Fprintf(w, resp)
 	default:
 		fmt.Fprintf(w, "Only post methods supported.")
 	}
+}
+
+func scriptGenerator(alertType string) string {
+	script := dbprovider.GetScript(alertType)
+	return script
 }
 
 // func scriptHandler(w http.ResponseWriter, r *http.Request) {
