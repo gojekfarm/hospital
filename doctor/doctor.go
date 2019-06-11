@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"../dbprovider"
+	"hospital/dbprovider"
 )
 
 // DoctorHandler recieves alerts

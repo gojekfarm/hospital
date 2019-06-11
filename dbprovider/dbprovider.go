@@ -104,7 +104,7 @@ func GetScript(alertType string) string {
 
 	if err == sql.ErrNoRows {
 		//log.Fatal("No Results Found")
-		return "none"
+		return "no script"
 	}
 
 	if err != nil {

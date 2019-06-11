@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"../dbprovider"
-	"../doctor"
+	"hospital/dbprovider"
+	doctor "hospital/doctora"
 )
 
 // ReceptionHandler recieves alerts
@@ -45,6 +45,7 @@ func callTODoctor(alertname string) string {
 	handler := http.HandlerFunc(doctor.DoctorHandler)
 
 	handler.ServeHTTP(rr, req)
+	fmt.Println(rr.Body)
 	return "success"
 }
 

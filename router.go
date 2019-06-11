@@ -3,8 +3,9 @@ package main
 import (
 	"net/http"
 
-	"./doctor"
-	"./reception"
+	"hospital/doctor"
+	"hospital/reception"
+
 	"github.com/gorilla/mux"
 )
 
