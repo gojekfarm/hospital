@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"./doctor"
 	"./reception"
 	"github.com/gorilla/mux"
 )
@@ -10,6 +11,7 @@ import (
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/reception", reception.ReceptionHandler)
+	r.HandleFunc("/doctor", doctor.DoctorHandler)
 	// r.HandleFunc("/operation", OperationHandler)
 	// r.HandleFunc("/reporting", ReportingHandler)
 	http.Handle("/", r)

@@ -1,13 +1,31 @@
 package reception
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+
+	"../dbprovider"
 )
 
 // ReceptionHandler recieves alerts
 func ReceptionHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "jainam")
+	switch r.Method {
+	case "POST":
+		body, _ := ioutil.ReadAll(r.Body)
+		var receivedObject received
+		json.Unmarshal(body, &receivedObject)
+		resp := alertReceiver(receivedObject)
+		fmt.Fprintf(w, resp)
+	default:
+		fmt.Fprintf(w, "Only post methods supported.")
+	}
+}
+
+func alertReceiver(receivedObj received) string {
+	dbprovider.InsertAlertUnique(receivedObj.Alerts[0].Labels.Alertname, receivedObj.Alerts[0].StartsAt, receivedObj.Alerts[0].Labels.Instance, receivedObj.Alerts[0].Status)
+	return "success"
 }
 
 // func acceptHandler(w http.ResponseWriter, r *http.Request) {
@@ -78,17 +96,6 @@ func ReceptionHandler(w http.ResponseWriter, r *http.Request) {
 // 		w.WriteHeader(http.StatusMethodNotAllowed)
 // 		fmt.Fprintf(w, "I can't do that.")
 // 	}
-// }
-
-// func viewHandler(w http.ResponseWriter, r *http.Request) {
-// 	filename := "alert_api.txt"
-// 	body, err := ioutil.ReadFile(filename)
-// 	if err != nil {
-// 		fmt.Fprintf(w, "error")
-// 	}
-// 	var receivedObject received
-// 	json.Unmarshal(body, &receivedObject)
-// 	fmt.Fprintf(w, receivedObject.Alerts[0].Labels.Alertname)
 // }
 
 type received struct {

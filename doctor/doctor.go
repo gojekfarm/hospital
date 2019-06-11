@@ -1,8 +1,25 @@
-package main
+package doctor
 
 import (
-	_ "github.com/go-sql-driver/mysql"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 )
+
+// ReceptionHandler recieves alerts
+func DoctorHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "POST":
+		body, _ := ioutil.ReadAll(r.Body)
+		var alert_type AlertName
+		json.Unmarshal(body, &receivedObject)
+		// resp := alertReceiver(receivedObject)
+		// fmt.Fprintf(w, resp)
+	default:
+		fmt.Fprintf(w, "Only post methods supported.")
+	}
+}
 
 // func scriptHandler(w http.ResponseWriter, r *http.Request) {
 // 	switch r.Method {
@@ -45,14 +62,6 @@ import (
 // 	}
 // }
 
-func main() {
-	// http.HandleFunc("/script", scriptHandler)
-
-	// log.Println("Go!")
-	// http.ListenAndServe(":8089", nil)
-
+type AlertName struct {
+	Alertname string
 }
-
-// type AlertName struct {
-// 	Alertname string
-// }
