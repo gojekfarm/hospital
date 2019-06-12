@@ -2,29 +2,13 @@ package reception
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 
 	"hospital/dbprovider"
 	"hospital/doctor"
 )
-
-// ReceptionHandler recieves alerts
-func ReceptionHandler(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case "POST":
-		body, _ := ioutil.ReadAll(r.Body)
-		var receivedObject received
-		json.Unmarshal(body, &receivedObject)
-		resp := alertReceiver(receivedObject)
-		fmt.Fprintf(w, resp)
-	default:
-		fmt.Fprintf(w, "Only post methods supported.")
-	}
-}
 
 func alertReceiver(receivedObj received) string {
 	dbprovider.InsertAlertUnique(receivedObj.Alerts[0].Labels.Alertname, receivedObj.Alerts[0].StartsAt, receivedObj.Alerts[0].Labels.Instance, receivedObj.Alerts[0].Status)
@@ -50,30 +34,30 @@ func callTODoctor(alertname string) string {
 }
 
 type received struct {
-	Receiver          string
-	Status            string
-	Alerts            []alert
-	GroupLabels       string
-	CommonLabels      string
-	CommonAnnotations string
-	ExternalURL       string
-	Version           string
-	GroupKey          string
+	Receiver          string  `json: "reciever"`
+	Status            string  `json: "status"`
+	Alerts            []alert `json: "alerts"`
+	GroupLabels       string  `json: "groupLables"`
+	CommonLabels      string  `json: "commonLables"`
+	CommonAnnotations string  `json: "commonAnnotations"`
+	ExternalURL       string  `json: "externalURL"`
+	Version           string  `json: "version"`
+	GroupKey          string  `json: "groupKey"`
 }
 
 type alert struct {
-	Status       string
-	Labels       label
-	Annotations  string
-	StartsAt     string
-	EndsAt       string
-	GeneratorURL string
+	Status       string `json: "status"`
+	Labels       label  `json: "labels"`
+	Annotations  string `json: "annotations"`
+	StartsAt     string `json: "startsAT"`
+	EndsAt       string `json: "endsAT"`
+	GeneratorURL string `json: "generatorURL"`
 }
 
 type label struct {
-	Alertname string
-	Backend   string
-	Instance  string
-	Job       string
-	Severity  string
+	Alertname string `json: "alertname"`
+	Backend   string `json: "backend"`
+	Instance  string `json: "instance"`
+	Job       string `json: "job"`
+	Severity  string `json: "severity"`
 }

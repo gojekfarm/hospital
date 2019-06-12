@@ -70,6 +70,7 @@ func main() {
 }
 
 func startserver(port string) {
+	http.HandleFunc("/ping", PingHandler)
 	http.HandleFunc("/reception", reception.ReceptionHandler)
 	http.HandleFunc("/doctor", doctor.DoctorHandler)
 	// http.HandleFunc("/operation", OperationHandler)

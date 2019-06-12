@@ -10,5 +10,5 @@ func scriptGenerator(alertType string) string {
 }
 
 type AlertName struct {
-	Alertname string
+	Alertname string `json: "alertname"`
 }
