@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"hospital/dbprovider"
+	"hospital/storage"
 	"hospital/doctor"
 )
 
 func alertReceiver(receivedObj received) string {
-	dbprovider.InsertAlertUnique(receivedObj.Alerts[0].Labels.Alertname, receivedObj.Alerts[0].StartsAt, receivedObj.Alerts[0].Labels.Instance, receivedObj.Alerts[0].Status)
+	storage.InsertAlertUnique(receivedObj.Alerts[0].Labels.Alertname, receivedObj.Alerts[0].StartsAt, receivedObj.Alerts[0].Labels.Instance, receivedObj.Alerts[0].Status)
 
 	if receivedObj.Alerts[0].Status == "firing" {
 		return callTODoctor(receivedObj.Alerts[0].Labels.Alertname)

@@ -1,11 +1,11 @@
 package doctor
 
 import (
-	"hospital/dbprovider"
+	"hospital/storage"
 )
 
 func scriptGenerator(alertType string) string {
-	script := dbprovider.GetScript(alertType)
+	script := storage.GetScript(alertType)
 	return script
 }
 

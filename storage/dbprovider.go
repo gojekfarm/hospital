@@ -1,4 +1,4 @@
-package dbprovider
+package storage
 
 import (
 	"database/sql"
