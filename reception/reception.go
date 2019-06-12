@@ -9,7 +9,7 @@ import (
 	"net/http/httptest"
 
 	"hospital/dbprovider"
-	doctor "hospital/doctora"
+	"hospital/doctor"
 )
 
 // ReceptionHandler recieves alerts

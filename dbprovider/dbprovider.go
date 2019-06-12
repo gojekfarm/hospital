@@ -3,24 +3,24 @@ package dbprovider
 import (
 	"database/sql"
 	"fmt"
+	"os"
 
 	_ "github.com/lib/pq"
-)
-
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "jainam"
-	password = "toor"
-	dbname   = "doctor"
 )
 
 var db *sql.DB
 
 func init() {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+
+	databaseHost := os.Getenv("DOCTOR_DB_HOST")
+	databasePort := os.Getenv("DOCTOR_DB_PORT")
+	databaseUser := os.Getenv("DOCTOR_DB_USER")
+	databasePass := os.Getenv("DOCTOR_DB_PASS")
+	databaseName := os.Getenv("DOCTOR_DB_NAME")
+
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+		databaseHost, databasePort, databaseUser, databasePass, databaseName)
 	var err error
 	db, err = sql.Open("postgres", psqlInfo)
 	if err != nil {
