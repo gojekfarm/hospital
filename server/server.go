@@ -1,18 +1,17 @@
 package server
 
 import (
-	"net/http"
 	"hospital/routes"
 	"hospital/storage"
+	"net/http"
+	"os"
 )
 
-
-
 // StartServer will start the server
-func StartServer(port string){
-	storage.Connect()
-	
+func StartServer() {
+	storage.Initialize()
+
 	routes.Routes()
 
-	http.ListenAndServe(":"+port, nil)
+	http.ListenAndServe(":"+os.Getenv("PORT"), nil)
 }

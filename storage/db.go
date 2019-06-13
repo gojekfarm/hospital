@@ -11,14 +11,13 @@ import (
 
 var db *sql.DB
 
-//Connect initializes the database
-func Connect() {
-
-	databaseHost := os.Getenv("DB_DOCTOR_HOST")
-	databasePort := os.Getenv("DB_DOCTOR_PORT")
-	databaseUser := os.Getenv("DB_DOCTOR_USER")
-	databasePass := os.Getenv("DB_DOCTOR_PASS")
-	databaseName := os.Getenv("DB_DOCTOR_NAME")
+//Initialize initializes the database
+func Initialize() {
+	databaseHost := os.Getenv("DB_HOST")
+	databasePort := os.Getenv("DB_PORT")
+	databaseUser := os.Getenv("DB_USER")
+	databasePass := os.Getenv("DB_PASS")
+	databaseName := os.Getenv("DB_NAME")
 
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",

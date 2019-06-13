@@ -7,7 +7,7 @@ import (
 
 // Migration will migrate all the way up
 func Migration() {
-	Connect()
+	Initialize()
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
 		panic(err)
@@ -26,7 +26,7 @@ func Migration() {
 
 //DownOneStep will migrate one version down
 func DownOneStep() {
-	Connect()
+	Initialize()
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
 		panic(err)

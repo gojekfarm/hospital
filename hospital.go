@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"hospital/storage"
 	"hospital/server"
+	"hospital/storage"
 	"log"
 	"os"
 
@@ -28,11 +28,7 @@ func commands() {
 			Aliases: []string{"s"},
 			Usage:   "Starts the server",
 			Action: func(c *cli.Context) {
-				port := "8088"
-				if c.Args().Present() {
-					port = c.Args()[0]
-				}
-				server.StartServer(port)
+				server.StartServer()
 			},
 		},
 		{
