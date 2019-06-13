@@ -7,8 +7,8 @@ import (
 	"net/http"
 )
 
-// ReceptionHandler recieves alerts
-func ReceptionHandler(w http.ResponseWriter, r *http.Request) {
+// Handler recieves alerts
+func Handler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 		body, _ := ioutil.ReadAll(r.Body)

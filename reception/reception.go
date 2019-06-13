@@ -26,7 +26,7 @@ func callTODoctor(alertname string) string {
 		return err.Error()
 	}
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(doctor.DoctorHandler)
+	handler := http.HandlerFunc(doctor.Handler)
 
 	handler.ServeHTTP(rr, req)
 	fmt.Println(rr.Body)

@@ -4,13 +4,14 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
-
+	// postgres
 	_ "github.com/lib/pq"
 )
 
 var db *sql.DB
 
-func init() {
+//Connect initializes the database
+func Connect(){
 
 	databaseHost := os.Getenv("DOCTOR_DB_HOST")
 	databasePort := os.Getenv("DOCTOR_DB_PORT")
@@ -34,11 +35,7 @@ func init() {
 	}
 
 	fmt.Println("Successfully connected!")
-}
 
-// ReturnDB return instance of
-func ReturnDB() *sql.DB {
-	return db
 }
 
 // Ping check connection to DB

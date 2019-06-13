@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"hospital/storage"
+	"hospital/server"
 	"log"
 	"os"
 
@@ -16,7 +17,7 @@ var app = cli.NewApp()
 func info() {
 	app.Name = "Hospital - An autonomous healing System"
 	app.Usage = "fix fault/failure in system"
-	app.Author = "Dilip"
+	app.Author = "Jainam | Dilip"
 	app.Version = "1.0.0"
 }
 
@@ -31,7 +32,7 @@ func commands() {
 				if c.Args().Present() {
 					port = c.Args()[0]
 				}
-				Startserver(port)
+				server.StartServer(port)
 			},
 		},
 		{
@@ -44,11 +45,11 @@ func commands() {
 			},
 		},
 		{
-			Name:    "rollback",
-			Aliases: []string{"r"},
+			Name:    "downonestep",
+			Aliases: []string{"dw1"},
 			Usage:   "Database roll back",
 			Action: func(c *cli.Context) {
-				storage.RollBack()
+				storage.DownOneStep()
 				fmt.Println("Version Rolled back by 1 step...")
 			},
 		},

@@ -7,21 +7,7 @@ import (
 
 // Migration will migrate all the way up
 func Migration() {
-	// databaseHost := os.Getenv("DOCTOR_DB_HOST")
-	// databasePort := os.Getenv("DOCTOR_DB_PORT")
-	// databaseUser := os.Getenv("DOCTOR_DB_USER")
-	// databasePass := os.Getenv("DOCTOR_DB_PASS")
-	// databaseName := os.Getenv("DOCTOR_DB_NAME")
-
-	// psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
-	// 	"password=%s dbname=%s sslmode=disable",
-	// 	databaseHost, databasePort, databaseUser, databasePass, databaseName)
-	// //var err error
-	// db, err := sql.Open("postgres", psqlInfo)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// defer db.Close()
+	Connect()
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
 		panic(err)
@@ -38,23 +24,9 @@ func Migration() {
 	}
 }
 
-//RollBack will migrate one version down
-func RollBack() {
-	// databaseHost := os.Getenv("DOCTOR_DB_HOST")
-	// databasePort := os.Getenv("DOCTOR_DB_PORT")
-	// databaseUser := os.Getenv("DOCTOR_DB_USER")
-	// databasePass := os.Getenv("DOCTOR_DB_PASS")
-	// databaseName := os.Getenv("DOCTOR_DB_NAME")
-
-	// psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
-	// 	"password=%s dbname=%s sslmode=disable",
-	// 	databaseHost, databasePort, databaseUser, databasePass, databaseName)
-	// //var err error
-	// db, err := sql.Open("postgres", psqlInfo)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// defer db.Close()
+//DownOneStep will migrate one version down
+func DownOneStep() {
+	Connect()
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
 		panic(err)
