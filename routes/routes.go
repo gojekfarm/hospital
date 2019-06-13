@@ -11,6 +11,6 @@ import (
 //Routes handles our whole routing and server
 func Routes() {
 	http.HandleFunc("/ping", healthCheck.Handler)
-	http.HandleFunc("/reception", reception.Handler)
-	http.HandleFunc("/doctor", doctor.Handler)
+	http.HandleFunc("/v1/reception", reception.Handler)
+	http.HandleFunc("/v1/doctor", doctor.Handler)
 }

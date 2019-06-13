@@ -12,11 +12,16 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 		body, _ := ioutil.ReadAll(r.Body)
-		var alertType AlertName
+		var alertType alertName
 		json.Unmarshal(body, &alertType)
 		resp := scriptGenerator(alertType.Alertname)
-		fmt.Fprintf(w, resp)
+		respScript := `{"script" : "`+resp+`"}`
+		fmt.Fprintf(w, respScript)
 	default:
 		fmt.Fprintf(w, "Only post methods supported.")
 	}
+}
+
+type alertName struct {
+	Alertname string `json: "alertname"`
 }
