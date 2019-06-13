@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+
 	// postgres
 	_ "github.com/lib/pq"
 )
@@ -11,7 +12,7 @@ import (
 var db *sql.DB
 
 //Connect initializes the database
-func Connect(){
+func Connect() {
 
 	databaseHost := os.Getenv("DB_DOCTOR_HOST")
 	databasePort := os.Getenv("DB_DOCTOR_PORT")
@@ -34,7 +35,7 @@ func Connect(){
 		panic(err)
 	}
 
-	fmt.Println("Successfully connected!")
+	fmt.Println("Database connected!")
 
 }
 

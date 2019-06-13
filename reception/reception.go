@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"hospital/storage"
 	"hospital/doctor"
+	"hospital/storage"
 )
 
 func alertReceiver(receivedObj received) string {
@@ -16,21 +16,21 @@ func alertReceiver(receivedObj received) string {
 	if receivedObj.Alerts[0].Status == "firing" {
 		return callTODoctor(receivedObj.Alerts[0].Labels.Alertname)
 	}
-	return `{"status" : "success"}`
+	return `{"status" : "resolved"}`
 }
 
 func callTODoctor(alertname string) string {
 	var jsonStr = []byte(`{"alertname":"` + alertname + `"}`)
 	req, err := http.NewRequest("POST", "/doctor", bytes.NewBuffer(jsonStr))
 	if err != nil {
-		return `{"status" : "`+err.Error()+`"}`
+		return `{"status" : "` + err.Error() + `"}`
 	}
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(doctor.Handler)
 
 	handler.ServeHTTP(rr, req)
 	fmt.Println(rr.Body)
-	return `{"status" : "success"}`
+	return `{"status" : "firing"}`
 }
 
 type received struct {
