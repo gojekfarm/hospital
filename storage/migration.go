@@ -19,7 +19,7 @@ func Migration() {
 		panic(err)
 	}
 	err = m.Up()
-	if err != nil {
+	if err != nil && err.Error() != "no change" {
 		panic(err)
 	}
 }

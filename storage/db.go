@@ -22,6 +22,9 @@ func Initialize() {
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		databaseHost, databasePort, databaseUser, databasePass, databaseName)
+
+	fmt.Println(databaseHost, databaseName, databasePort, databasePass, databaseUser)
+
 	var err error
 	db, err = sql.Open("postgres", psqlInfo)
 	if err != nil {
