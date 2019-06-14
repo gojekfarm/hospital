@@ -4,7 +4,8 @@ import (
 	"hospital/storage"
 )
 
-func scriptGenerator(alertType string) string {
-	script := storage.GetScript(alertType)
-	return script
+func resolveAlert(alertID int, alertName, jobName string) string {
+	script := storage.GetScript(alertName)
+	storage.InsertOperation(alertID, jobName, script, "firing")
+	return "done"
 }
