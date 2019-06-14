@@ -15,7 +15,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		var alertType alertName
 		json.Unmarshal(body, &alertType)
 		resp := scriptGenerator(alertType.Alertname)
-		respScript := `{"script" : "`+resp+`"}`
+		respScript := `{"script" : "` + resp + `"}`
 		fmt.Fprintf(w, respScript)
 	default:
 		fmt.Fprintf(w, "Only post methods supported.")
@@ -23,5 +23,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 type alertName struct {
-	Alertname string `json: "alertname"`
+	Alertname string `json:"alertname"`
 }
