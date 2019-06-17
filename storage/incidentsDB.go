@@ -1,6 +1,9 @@
 package storage
 
-import "database/sql"
+import (
+	"database/sql"
+	"log"
+)
 
 // InsertAlert insert alert into DB
 func InsertAlert(alertname, startsAT, address, status string) {
@@ -42,7 +45,7 @@ func GetAlertID(alertname, startsAT, address string) int {
 	}
 
 	if err != nil {
-		//log.Fatal(err)
+		log.Println(err)
 	}
 	return id
 }

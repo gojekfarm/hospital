@@ -17,7 +17,10 @@ func GetOperation(surgeonID string) string {
 	var script string
 	var oparray []operation
 	for rows.Next() {
-		rows.Scan(&id, &script)
+		err := rows.Scan(&id, &script)
+		if err != nil {
+			log.Println(err)
+		}
 		oparray = append(oparray, operation{id, script})
 	}
 	jsonStr, err := json.Marshal(oparray)

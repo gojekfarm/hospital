@@ -1,6 +1,9 @@
 package storage
 
-import "database/sql"
+import (
+	"database/sql"
+	"log"
+)
 
 // GetScript returns the script
 func GetScript(alertType string) string {
@@ -14,7 +17,7 @@ func GetScript(alertType string) string {
 	}
 
 	if err != nil {
-		//log.Fatal(err)
+		log.Println(err)
 	}
 	return script
 }
