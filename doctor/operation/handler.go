@@ -8,22 +8,27 @@ import (
 	"net/http"
 )
 
-// Handler recieves alerts
+// Handler recieves alerts.
 func Handler(w http.ResponseWriter, r *http.Request) {
+
 	switch r.Method {
+
 	case "POST":
 		body, _ := ioutil.ReadAll(r.Body)
+
 		var oprequest operationRequest
+
 		err := json.Unmarshal(body, &oprequest)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Println(err)
 			return
 		}
+
 		resp, err := getOperations(oprequest.SurgeonID)
 		if err != nil {
 			if err == ErrTimeout {
-				// Do special handling.
+				// Do something.
 			}
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Println(err)

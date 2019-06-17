@@ -2,7 +2,6 @@ package operation
 
 import (
 	"errors"
-	"fmt"
 	"hospital/storage"
 	"log"
 	"time"
@@ -18,9 +17,7 @@ func getOperations(surgeonID string) (string, error) {
 
 	for {
 		select {
-		// case <-ctx.Done():
-		// 	log.Printf("Received context cancel")
-		// 	return ""
+
 		case <-timeout.C:
 			log.Printf("Received timeout")
 			return "", ErrTimeout
@@ -30,7 +27,7 @@ func getOperations(surgeonID string) (string, error) {
 			if err != nil {
 				return "", err
 			}
-			fmt.Println("ticking")
+
 			if firedOpsStr != "[]" {
 				return firedOpsStr, nil
 			}
