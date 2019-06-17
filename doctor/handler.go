@@ -12,9 +12,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 		body, _ := ioutil.ReadAll(r.Body)
-		var alertType alertName
-		json.Unmarshal(body, &alertType)
-		resp := scriptGenerator(alertType.Alertname)
+		var alertDetails alert
+		json.Unmarshal(body, &alertDetails)
+		resp := resolveAlert(alertDetails.ID, alertDetails.Alertname, alertDetails.JobName)
 		respScript := `{"script" : "` + resp + `"}`
 		fmt.Fprintf(w, respScript)
 	default:
@@ -22,6 +22,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-type alertName struct {
+type alert struct {
+	ID        int    `json:"id"`
 	Alertname string `json:"alertname"`
+	JobName   string `json:"jobname"`
 }
