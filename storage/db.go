@@ -33,6 +33,9 @@ func Initialize() {
 		panic(err)
 	}
 
+	db.SetMaxOpenConns(5)
+	db.SetMaxIdleConns(5)
+
 	fmt.Println("Database connected!")
 
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -13,17 +14,26 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		body, _ := ioutil.ReadAll(r.Body)
 		var oprequest operationRequest
-		json.Unmarshal(body, &oprequest)
-		resp := getOperation(oprequest.SurgeonID)
-		if resp != "null" {
-			fmt.Fprintf(w, resp)
-		} else {
-			respScript := `[]`
-			fmt.Fprintf(w, respScript)
+		err := json.Unmarshal(body, &oprequest)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err)
+			return
+		}
+		resp, err := getOperations(oprequest.SurgeonID)
+		if err != nil {
+			if err == ErrTimeout {
+				// Do special handling.
+			}
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err)
+			return
 		}
 
+		fmt.Fprintf(w, resp)
+
 	default:
-		fmt.Fprintf(w, "Only post methods supported.")
+		fmt.Fprintf(w, "Only post method supported.")
 	}
 }
 

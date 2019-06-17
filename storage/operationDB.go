@@ -2,7 +2,6 @@ package storage
 
 import (
 	"encoding/json"
-	"log"
 )
 
 // InsertOperation inserts operations
@@ -15,30 +14,36 @@ func InsertOperation(alertID int, jobName, script, status string) {
 	}
 }
 
-// GetOperation returns the script
-func GetOperation(surgeonID string) string {
-	rows, err := db.Query(`SELECT id, script FROM operations WHERE surgeon_id = $1 and status = $2`,
+// GetOperation returns the script.
+func GetOperation(surgeonID string) (string, error) {
+	rows, err := db.Query(
+		`SELECT id, script FROM operations WHERE surgeon_id = $1 and status = $2`,
 		surgeonID, "firing")
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 	defer rows.Close()
-	var id int
-	var script string
-	var oparray []operation
+
+	ops := make([]*operation, 0)
+
 	for rows.Next() {
-		err := rows.Scan(&id, &script)
-		if err != nil {
-			log.Println(err)
+		var (
+			id     int
+			script string
+		)
+
+		if err := rows.Scan(&id, &script); err != nil {
+			return "", err
 		}
-		oparray = append(oparray, operation{id, script})
-	}
-	jsonStr, err := json.Marshal(oparray)
-	if err != nil {
-		log.Println(err)
+		ops = append(ops, &operation{id, script})
 	}
 
-	return string(jsonStr)
+	jsonStr, err := json.Marshal(ops)
+	if err != nil {
+		return "", err
+	}
+
+	return string(jsonStr), nil
 }
 
 type operation struct {
