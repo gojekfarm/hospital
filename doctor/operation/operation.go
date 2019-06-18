@@ -12,12 +12,12 @@ import (
 var ErrTimeout = errors.New("timeout")
 
 func getOperations(surgeonID string) ([]*storage.Operation, error) {
-	timeoutTime, err := strconv.Atoi(os.Getenv("REQUEST_TIMEOUT"))
+	timeoutTime, err := strconv.Atoi(os.Getenv("REQUEST_TIMEOUT_SECONDS"))
 	if err != nil {
 		panic(err)
 	}
 
-	queryTime, err := strconv.Atoi(os.Getenv("QUERY_INTERVAL"))
+	queryTime, err := strconv.Atoi(os.Getenv("QUERY_INTERVAL_SECONDS"))
 	if err != nil {
 		panic(err)
 	}

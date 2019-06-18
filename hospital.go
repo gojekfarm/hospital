@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"hospital/server"
 	"hospital/storage"
+	"hospital/surgeon"
 	"log"
 	"os"
 
@@ -47,6 +48,15 @@ func commands() {
 			Action: func(c *cli.Context) {
 				storage.DownOneStep()
 				fmt.Println("Version Rolled back by 1 step...")
+			},
+		},
+		{
+			Name:    "startsurgeon",
+			Aliases: []string{"surgeon"},
+			Usage:   "Surgeon starts long polling",
+			Action: func(c *cli.Context) {
+				fmt.Println("Started Surgeon...")
+				surgeon.LongPolling()
 			},
 		},
 	}

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"hospital/routes"
 	"hospital/storage"
 	"net/http"
@@ -13,5 +14,8 @@ func StartServer() {
 
 	routes.Routes()
 
-	http.ListenAndServe(":"+os.Getenv("PORT"), nil)
+	err := http.ListenAndServe(os.Getenv("HOST_ADDRESS")+":"+os.Getenv("PORT"), nil)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

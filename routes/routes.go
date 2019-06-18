@@ -10,17 +10,21 @@ import (
 	"time"
 )
 
+var OperationAPIPath = "/v1/operation"
+var PingAPIPath = "/ping"
+var ReceptionAPIPath = "/v1/reception"
+
 //Routes handles our whole routing and server
 func Routes() {
-	http.HandleFunc("/ping", healthCheck.Handler)
-	http.HandleFunc("/v1/reception", reception.Handler)
+	http.HandleFunc(PingAPIPath, healthCheck.Handler)
+	http.HandleFunc(ReceptionAPIPath, reception.Handler)
 
-	timeoutTime, err := strconv.Atoi(os.Getenv("REQUEST_TIMEOUT"))
+	timeoutTime, err := strconv.Atoi(os.Getenv("REQUEST_TIMEOUT_SECONDS"))
 	if err != nil {
 		panic(err)
 	}
 
-	http.Handle("/v1/operation",
+	http.Handle(OperationAPIPath,
 		http.TimeoutHandler(http.HandlerFunc(operation.Handler), time.Duration(timeoutTime)*time.Second,
 			"Your request has timed out. :("))
 }

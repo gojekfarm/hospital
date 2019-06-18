@@ -1,4 +1,4 @@
-package main
+package surgeon
 
 import (
 	"bytes"
@@ -7,28 +7,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os/exec"
-	"time"
 )
-
-func longPolling() {
-	ticker := time.NewTicker(35 * time.Second)
-	defer ticker.Stop()
-
-	makeRequest()
-
-	for {
-		select {
-
-		case <-ticker.C:
-			makeRequest()
-		}
-	}
-
-}
 
 func makeRequest() {
 	var jsonStr = []byte(`{"surgeonID":"` + surgeonID + `"}`)
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequest("GET", url, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		panic(err)
 	}

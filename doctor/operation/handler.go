@@ -13,7 +13,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 
-	case "POST":
+	case "GET":
 		body, _ := ioutil.ReadAll(r.Body)
 
 		var oprequest operationRequest
@@ -48,7 +48,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, string(jsonStr))
 
 	default:
-		fmt.Fprintf(w, "Only post method supported.")
+		fmt.Fprintf(w, "Only get method supported.")
 	}
 }
 
