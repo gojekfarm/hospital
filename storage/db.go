@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"strconv"
 
 	// postgres
 	_ "github.com/lib/pq"
@@ -33,8 +34,17 @@ func Initialize() {
 		panic(err)
 	}
 
-	db.SetMaxOpenConns(5)
-	db.SetMaxIdleConns(5)
+	maxOpenConn, err := strconv.Atoi(os.Getenv("DB_MAX_OPEN_CONN"))
+	if err != nil {
+		panic(err)
+	}
+	maxIdleConn, err := strconv.Atoi(os.Getenv("DB_MAX_IDLE_CONN"))
+	if err != nil {
+		panic(err)
+	}
+
+	db.SetMaxOpenConns(maxOpenConn)
+	db.SetMaxIdleConns(maxIdleConn)
 
 	fmt.Println("Database connected!")
 

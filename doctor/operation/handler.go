@@ -20,22 +20,32 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 		err := json.Unmarshal(body, &oprequest)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			log.Println(err)
 			return
 		}
 
-		resp, err := getOperations(oprequest.SurgeonID)
+		ops, err := getOperations(oprequest.SurgeonID)
 		if err != nil {
 			if err == ErrTimeout {
-				// Do something.
+				http.Error(w, http.StatusText(http.StatusRequestTimeout), http.StatusRequestTimeout)
+				log.Println(err)
+				return
 			}
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			log.Println(err)
 			return
 		}
 
-		fmt.Fprintf(w, resp)
+		jsonStr, err := json.Marshal(ops)
+
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			log.Println(err)
+			return
+		}
+
+		fmt.Fprintf(w, string(jsonStr))
 
 	default:
 		fmt.Fprintf(w, "Only post method supported.")

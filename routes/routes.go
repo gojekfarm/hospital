@@ -5,6 +5,8 @@ import (
 	"hospital/healthCheck"
 	"hospital/reception"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -12,7 +14,13 @@ import (
 func Routes() {
 	http.HandleFunc("/ping", healthCheck.Handler)
 	http.HandleFunc("/v1/reception", reception.Handler)
+
+	timeoutTime, err := strconv.Atoi(os.Getenv("REQUEST_TIMEOUT"))
+	if err != nil {
+		panic(err)
+	}
+
 	http.Handle("/v1/operation",
-		http.TimeoutHandler(http.HandlerFunc(operation.Handler), 30*time.Second,
+		http.TimeoutHandler(http.HandlerFunc(operation.Handler), time.Duration(timeoutTime)*time.Second,
 			"Your request has timed out. :("))
 }
