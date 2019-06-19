@@ -12,10 +12,12 @@ import (
 	"time"
 )
 
-var OperationAPIPath = "/v1/operation"
-var PingAPIPath = "/ping"
-var ReceptionAPIPath = "/v1/reception"
-var ReportAPIPath = "/v1/report"
+var (
+	OperationAPIPath = "/v1/operation"
+	PingAPIPath      = "/ping"
+	ReceptionAPIPath = "/v1/reception"
+	ReportAPIPath    = "/v1/report"
+)
 
 //Routes handles our whole routing and server
 func Routes() {

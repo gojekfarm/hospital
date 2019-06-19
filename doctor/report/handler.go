@@ -31,10 +31,22 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		fmt.Fprintf(w, `{"status":"success"}`)
+		response := struct {
+			Status string `json:"status"`
+		}{
+			Status: "success",
+		}
+
+		responseJson, err := json.Marshal(response)
+		if err != nil {
+			log.Println(err)
+		}
+
+		fmt.Fprintf(w, string(responseJson))
 
 	default:
 		fmt.Fprintf(w, "Only post method supported.")
+		// error 4xx
 	}
 }
 

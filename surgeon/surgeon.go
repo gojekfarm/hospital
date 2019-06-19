@@ -10,7 +10,7 @@ var surgeonID = os.Getenv("SURGEON_ID")
 var url = os.Getenv("HOST_PROTOCOL") + "://" + os.Getenv("HOST_ADDRESS") +
 	":" + os.Getenv("PORT")
 
-// LongPolling will do ling polling.
+// LongPolling will do long polling.
 func LongPolling() {
 
 	for {
