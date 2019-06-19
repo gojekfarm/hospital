@@ -1,7 +1,6 @@
 package surgeon
 
 import (
-	"hospital/routes"
 	"os"
 	"strconv"
 	"time"
@@ -9,7 +8,7 @@ import (
 
 var surgeonID = os.Getenv("SURGEON_ID")
 var url = os.Getenv("HOST_PROTOCOL") + "://" + os.Getenv("HOST_ADDRESS") +
-	":" + os.Getenv("PORT") + routes.OperationAPIPath
+	":" + os.Getenv("PORT")
 
 // LongPolling will do ling polling.
 func LongPolling() {

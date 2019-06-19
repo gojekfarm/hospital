@@ -1,0 +1,1 @@
+alter table operations drop column if exists logs;

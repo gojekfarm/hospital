@@ -6,8 +6,11 @@ import (
 
 func resolveAlert(alertID int, alertName, jobName string) string {
 	script := storage.GetScript(alertName)
+
 	if script != "no script" {
 		storage.InsertOperation(alertID, jobName, script, "firing")
+		return "script found"
 	}
-	return "done"
+
+	return "script not found"
 }

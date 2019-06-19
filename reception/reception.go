@@ -2,7 +2,7 @@ package reception
 
 import (
 	"bytes"
-	"fmt"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -18,21 +18,21 @@ func alertReceiver(receivedObj received) string {
 	if receivedObj.Alerts[0].Status == "firing" {
 		return callTODoctor(id, receivedObj.Alerts[0].Labels.Alertname, receivedObj.Alerts[0].Labels.Job)
 	}
-	return `{"status" : "resolved"}`
+	return `{"status" : "was resolved"}`
 }
 
 func callTODoctor(id int, alertname, jobname string) string {
 	var jsonStr = []byte(`{"id":` + strconv.Itoa(id) + `, "alertname":"` + alertname + `", "jobname":"` + jobname + `"}`)
 	req, err := http.NewRequest("POST", "/doctor", bytes.NewBuffer(jsonStr))
 	if err != nil {
-		return `{"status" : "` + err.Error() + `"}`
+		return `{"status" : "reception failed"}`
 	}
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(doctor.Handler)
 
 	handler.ServeHTTP(rr, req)
-	fmt.Println(rr.Body)
-	return `{"status" : "firing"}`
+	log.Println(rr.Body)
+	return `{"status" : "was firing"}`
 }
 
 type received struct {

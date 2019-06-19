@@ -2,7 +2,9 @@ package routes
 
 import (
 	"hospital/doctor/operation"
+	"hospital/doctor/report"
 	"hospital/healthCheck"
+
 	"hospital/reception"
 	"net/http"
 	"os"
@@ -13,11 +15,13 @@ import (
 var OperationAPIPath = "/v1/operation"
 var PingAPIPath = "/ping"
 var ReceptionAPIPath = "/v1/reception"
+var ReportAPIPath = "/v1/report"
 
 //Routes handles our whole routing and server
 func Routes() {
 	http.HandleFunc(PingAPIPath, healthCheck.Handler)
 	http.HandleFunc(ReceptionAPIPath, reception.Handler)
+	http.HandleFunc(ReportAPIPath, report.Handler)
 
 	timeoutTime, err := strconv.Atoi(os.Getenv("REQUEST_TIMEOUT_SECONDS"))
 	if err != nil {

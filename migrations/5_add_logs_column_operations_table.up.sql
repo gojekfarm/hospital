@@ -1,0 +1,1 @@
+alter table operations add column logs character varying(255);

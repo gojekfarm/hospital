@@ -41,3 +41,13 @@ type Operation struct {
 	ID     int    `json:"id"`
 	Script string `json:"script"`
 }
+
+// ReportStatus changes status of an operation.
+func ReportStatus(id int, status, logs string) error {
+	sqlStatement := `UPDATE operations SET status = $2, logs = $3 WHERE id = $1;`
+	_, err := db.Exec(sqlStatement, id, status, logs)
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -12,8 +12,14 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 		body, _ := ioutil.ReadAll(r.Body)
+
 		var receivedObject received
-		json.Unmarshal(body, &receivedObject)
+		err := json.Unmarshal(body, &receivedObject)
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			return
+		}
+
 		resp := alertReceiver(receivedObject)
 		fmt.Fprintf(w, resp)
 	default:

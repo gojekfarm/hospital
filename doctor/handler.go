@@ -13,10 +13,15 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		body, _ := ioutil.ReadAll(r.Body)
 		var alertDetails alert
-		json.Unmarshal(body, &alertDetails)
+		err := json.Unmarshal(body, &alertDetails)
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			return
+		}
+
 		resp := resolveAlert(alertDetails.ID, alertDetails.Alertname, alertDetails.JobName)
-		respScript := `{"script" : "` + resp + `"}`
-		fmt.Fprintf(w, respScript)
+		respStr := `{"status" : "` + resp + `"}`
+		fmt.Fprintf(w, respStr)
 	default:
 		fmt.Fprintf(w, "Only post methods supported.")
 	}
