@@ -37,6 +37,7 @@ func GetOperation(surgeonID string) ([]*Operation, error) {
 	return ops, nil
 }
 
+// Operation struct for response to surgeon.
 type Operation struct {
 	ID     int    `json:"id"`
 	Script string `json:"script"`

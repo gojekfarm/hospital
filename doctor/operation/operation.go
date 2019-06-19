@@ -3,12 +3,12 @@ package operation
 import (
 	"errors"
 	"hospital/storage"
-	"log"
 	"os"
 	"strconv"
 	"time"
 )
 
+// ErrTimeout for timeout error.
 var ErrTimeout = errors.New("timeout")
 
 func getOperations(surgeonID string) ([]*storage.Operation, error) {
@@ -40,7 +40,6 @@ func getOperations(surgeonID string) ([]*storage.Operation, error) {
 		select {
 
 		case <-timeout.C:
-			log.Printf("Received timeout")
 			return make([]*storage.Operation, 0), ErrTimeout
 
 		case <-ticker.C:

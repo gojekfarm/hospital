@@ -29,11 +29,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			if err == ErrTimeout {
 				http.Error(w, http.StatusText(http.StatusRequestTimeout), http.StatusRequestTimeout)
-				log.Println(err)
 				return
 			}
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			log.Println(err)
 			return
 		}
 
@@ -41,7 +39,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			log.Println(err)
 			return
 		}
 
