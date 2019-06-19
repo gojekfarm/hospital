@@ -16,6 +16,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		var receivedObject received
 		err := json.Unmarshal(body, &receivedObject)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}

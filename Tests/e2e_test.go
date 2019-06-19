@@ -34,7 +34,7 @@ func TestReceptionFiring(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expected := "firing"
+	expected := "was firing"
 	if resp.Status != expected {
 		t.Errorf("alert send failed")
 	}
@@ -61,7 +61,7 @@ func TestReceptionResolved(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expected := "resolved"
+	expected := "was resolved"
 	if resp.Status != expected {
 		t.Errorf("alert send failed")
 	}

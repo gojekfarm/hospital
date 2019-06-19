@@ -36,24 +36,24 @@ func callTODoctor(id int, alertname, jobname string) string {
 }
 
 type received struct {
-	Receiver          string  `json:"reciever"`
-	Status            string  `json:"status"`
-	Alerts            []alert `json:"alerts"`
-	GroupLabels       string  `json:"groupLables"`
-	CommonLabels      string  `json:"commonLables"`
-	CommonAnnotations string  `json:"commonAnnotations"`
-	ExternalURL       string  `json:"externalURL"`
-	Version           string  `json:"version"`
-	GroupKey          string  `json:"groupKey"`
+	Receiver          string                   `json:"reciever"`
+	Status            string                   `json:"status"`
+	Alerts            []alert                  `json:"alerts"`
+	GroupLabels       string                   `json:"groupLables"`
+	CommonLabels      string                   `json:"commonLables"`
+	CommonAnnotations struct{ Summary string } `json:"commonAnnotations"`
+	ExternalURL       string                   `json:"externalURL"`
+	Version           string                   `json:"version"`
+	GroupKey          string                   `json:"groupKey"`
 }
 
 type alert struct {
-	Status       string `json:"status"`
-	Labels       label  `json:"labels"`
-	Annotations  string `json:"annotations"`
-	StartsAt     string `json:"startsAT"`
-	EndsAt       string `json:"endsAT"`
-	GeneratorURL string `json:"generatorURL"`
+	Status       string                   `json:"status"`
+	Labels       label                    `json:"labels"`
+	Annotations  struct{ Summary string } `json:"annotations"`
+	StartsAt     string                   `json:"startsAT"`
+	EndsAt       string                   `json:"endsAT"`
+	GeneratorURL string                   `json:"generatorURL"`
 }
 
 type label struct {
