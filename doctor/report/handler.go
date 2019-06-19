@@ -53,5 +53,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 type reportRequest struct {
 	ID     int    `json:"id"`
 	Status string `json:"status"`
-	Log    string `json:"log"`
+	Logs   string `json:"logs"`
 }

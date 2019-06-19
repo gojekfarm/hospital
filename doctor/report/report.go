@@ -5,6 +5,6 @@ import (
 )
 
 func statusReporter(reportReq reportRequest) error {
-	err := storage.ReportStatus(reportReq.ID, reportReq.Status, reportReq.Log)
+	err := storage.ReportStatus(reportReq.ID, reportReq.Status, reportReq.Logs)
 	return err
 }

@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
-	"strconv"
 )
 
 func makeRequest() {
@@ -67,8 +66,13 @@ type operation struct {
 }
 
 func makeReport(id int, status, logs string) {
-	var jsonStr = []byte(`{"id":"` + strconv.Itoa(id) + `","status":"` + status +
-		`","logs":"` + logs + `"}`)
+	reqBody := reportReq{id, status, logs}
+
+	jsonStr, err := json.Marshal(reqBody)
+	if err != nil {
+		log.Println(err)
+	}
+
 	req, err := http.NewRequest("POST", url+routes.ReportAPIPath, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		log.Println(err)
@@ -85,4 +89,10 @@ func makeReport(id int, status, logs string) {
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	log.Println(string(body))
+}
+
+type reportReq struct {
+	ID     int    `json:"id"`
+	Status string `json:"status"`
+	Logs   string `json:"logs"`
 }

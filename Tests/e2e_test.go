@@ -68,5 +68,5 @@ func TestReceptionResolved(t *testing.T) {
 }
 
 type receptionResponse struct {
-	Status string `json: "status"`
+	Status string `json:"status"`
 }
