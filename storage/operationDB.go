@@ -43,12 +43,42 @@ type Operation struct {
 	Script string `json:"script"`
 }
 
-// ReportStatus changes status of an operation.
-func ReportStatus(id int, status, logs string) error {
+// RecordStatus changes status of an operation.
+func RecordStatus(id int, status, logs string) error {
 	sqlStatement := `UPDATE operations SET status = $2, logs = $3 WHERE id = $1;`
 	_, err := db.Exec(sqlStatement, id, status, logs)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+// AlertNameFromOpID returns alertname from operation ID.
+func AlertNameFromOpID(id int) (string, error) {
+	var alertID int
+
+	err := db.QueryRow(`SELECT alert_id FROM operations WHERE id = $1`,
+		id).Scan(&alertID)
+
+	if err != nil {
+		return "", err
+	}
+
+	alertName, err := GetAlertName(alertID)
+
+	return alertName, err
+}
+
+// GetSurgeonID returns the surgeonID of corresponding ID.
+func GetSurgeonID(id int) (string, error) {
+	var surgeonID string
+
+	err := db.QueryRow(`SELECT surgeon_id FROM operations WHERE id = $1`,
+		id).Scan(&surgeonID)
+
+	if err != nil {
+		return "", err
+	}
+
+	return surgeonID, err
 }

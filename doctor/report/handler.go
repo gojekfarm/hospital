@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+// Handler for /report
 func Handler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
@@ -24,7 +25,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = statusReporter(reportReq)
+		err = reportStatus(reportReq)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			log.Println(err)
@@ -37,12 +38,12 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			Status: "success",
 		}
 
-		responseJson, err := json.Marshal(response)
+		responseJSON, err := json.Marshal(response)
 		if err != nil {
 			log.Println(err)
 		}
 
-		fmt.Fprintf(w, string(responseJson))
+		fmt.Fprintf(w, string(responseJSON))
 
 	default:
 		fmt.Fprintf(w, "Only post method supported.")

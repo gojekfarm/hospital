@@ -42,7 +42,15 @@ func makeRequest() {
 
 func runScripts(ops []operation) {
 	for _, op := range ops {
-		out, err := exec.Command("sh", "-c", op.Script).Output()
+		cmd := exec.Command("sh", "-c", op.Script)
+		var stdout, stderr bytes.Buffer
+		cmd.Stdout = &stdout
+		cmd.Stderr = &stderr
+
+		err := cmd.Run()
+
+		outStr, errStr := string(stdout.Bytes()), string(stderr.Bytes())
+
 		exitCode := 0
 		if err != nil {
 			log.Println(err)
@@ -50,13 +58,15 @@ func runScripts(ops []operation) {
 			exitCode = status.ExitCode()
 		}
 
+		logs := outStr
 		status := "completed"
 		if exitCode != 0 {
+			logs = errStr
 			status = "failed"
 		}
-		log.Println(string(out))
+		log.Println(logs)
 
-		makeReport(op.ID, status, string(out))
+		makeReport(op.ID, status, logs)
 	}
 }
 

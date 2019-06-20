@@ -51,3 +51,13 @@ func GetAlertID(alertname, startsAT, jobname, address string) int {
 	}
 	return id
 }
+
+// GetAlertName returns alertname of given ID
+func GetAlertName(id int) (string, error) {
+	var alertname string
+
+	err := db.QueryRow(`SELECT alertname FROM incidents WHERE id = $1`,
+		id).Scan(&alertname)
+
+	return alertname, err
+}
