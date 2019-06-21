@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-// ErrTimeout for timeout error.
-var ErrTimeout = errors.New("timeout")
+// ErrNoContent for timeout error.
+var ErrNoContent = errors.New("timeout")
 
 func getOperations(surgeonID string) ([]*storage.Operation, error) {
 	timeoutTime, err := strconv.Atoi(os.Getenv("REQUEST_TIMEOUT_SECONDS"))
@@ -40,7 +40,7 @@ func getOperations(surgeonID string) ([]*storage.Operation, error) {
 		select {
 
 		case <-timeout.C:
-			return make([]*storage.Operation, 0), ErrTimeout
+			return make([]*storage.Operation, 0), ErrNoContent
 
 		case <-ticker.C:
 			firedOpsStr, err := storage.GetOperation(surgeonID)

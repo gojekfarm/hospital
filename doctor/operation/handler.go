@@ -27,8 +27,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 		ops, err := getOperations(oprequest.SurgeonID)
 		if err != nil {
-			if err == ErrTimeout {
-				http.Error(w, http.StatusText(http.StatusRequestTimeout), http.StatusRequestTimeout)
+			if err == ErrNoContent {
+				http.Error(w, "Poll time over.", http.StatusNoContent)
 				return
 			}
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

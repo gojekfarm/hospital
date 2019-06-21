@@ -1,1 +1,1 @@
-alter table operations add column logs character varying(255);
+alter table operations add column logs text default NULL;

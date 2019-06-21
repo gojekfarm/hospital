@@ -3,6 +3,7 @@ package surgeon
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"hospital/routes"
 	"io/ioutil"
 	"log"
@@ -10,7 +11,9 @@ import (
 	"os/exec"
 )
 
-func makeRequest() {
+var errServer = errors.New("server error")
+
+func makeRequest() error {
 	var jsonStr = []byte(`{"surgeonID":"` + surgeonID + `"}`)
 	req, err := http.NewRequest("GET", url+routes.OperationAPIPath, bytes.NewBuffer(jsonStr))
 	if err != nil {
@@ -22,12 +25,14 @@ func makeRequest() {
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println(err)
+		return errServer
 	}
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	if resp.StatusCode == 200 {
+
 		var ops []operation
 		err := json.Unmarshal(body, &ops)
 		if err != nil {
@@ -35,9 +40,12 @@ func makeRequest() {
 		}
 
 		runScripts(ops)
-	} else {
+	} else if resp.StatusCode == 204 {
 		log.Println("No operations to execute.")
+	} else {
+		return errServer
 	}
+	return nil
 }
 
 func runScripts(ops []operation) {

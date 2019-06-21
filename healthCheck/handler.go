@@ -1,4 +1,4 @@
-package healthCheck
+package healthcheck
 
 import (
 	"fmt"
