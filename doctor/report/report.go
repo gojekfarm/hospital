@@ -39,15 +39,23 @@ func slackReport(surgeonID, alertname, status, logs string) {
 		color = "danger"
 	}
 	attachment1.Color = &color
+
 	attachment1.addField(field{Title: "Host Name",
 		Value: surgeonID,
 		Short: true})
+
 	attachment1.addField(field{Title: "Alert Name",
 		Value: alertname,
 		Short: true})
+
+	if size := len(logs); size > 50 {
+		logs = logs[size-50:]
+	}
+
 	attachment1.addField(field{Title: "Logs",
 		Value: "`" + "`" + "`" + logs + "`" + "`" + "`",
 		Short: false})
+
 	payloadSent := payload{
 		Text:        "Reporting the logs of command executed:",
 		Attachments: []attachment{attachment1},

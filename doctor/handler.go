@@ -19,7 +19,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		resp := resolveAlert(alertDetails.ID, alertDetails.Alertname, alertDetails.JobName)
+		resp := resolveAlert(alertDetails.ID, alertDetails.Alertname, alertDetails.ApplicationID)
 		respStr := `{"status" : "` + resp + `"}`
 		fmt.Fprintf(w, respStr)
 	default:
@@ -28,7 +28,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 type alert struct {
-	ID        int    `json:"id"`
-	Alertname string `json:"alertname"`
-	JobName   string `json:"jobname"`
+	ID            int    `json:"id"`
+	Alertname     string `json:"alertname"`
+	ApplicationID string `json:"applicationID"`
 }

@@ -1,1 +1,1 @@
-alter table incidents drop column if exists jobname;
+alter table incidents drop column if exists application_id;

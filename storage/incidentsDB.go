@@ -6,11 +6,11 @@ import (
 )
 
 // InsertAlert insert alert into DB
-func InsertAlert(alertname, startsAT, jobname, address, status string) int {
+func InsertAlert(alertname, startsAT, applicationID, address, status string) int {
 	lastInsertID := 0
-	sqlStatement := `INSERT INTO incidents (alertname, starts_at, jobname, address, status)
+	sqlStatement := `INSERT INTO incidents (alertname, starts_at, application_id, address, status)
 						VALUES ($1, $2, $3, $4, $5) RETURNING id`
-	err := db.QueryRow(sqlStatement, alertname, startsAT, jobname, address, status).Scan(&lastInsertID)
+	err := db.QueryRow(sqlStatement, alertname, startsAT, applicationID, address, status).Scan(&lastInsertID)
 	if err != nil {
 		panic(err)
 	}
@@ -18,8 +18,8 @@ func InsertAlert(alertname, startsAT, jobname, address, status string) int {
 }
 
 // InsertAlertUnique insert alert into DB unique
-func InsertAlertUnique(alertname, startsAT, jobname, address, status string) int {
-	id := GetAlertID(alertname, startsAT, jobname, address)
+func InsertAlertUnique(alertname, startsAT, applicationID, address, status string) int {
+	id := GetAlertID(alertname, startsAT, applicationID, address)
 	if id != -1 {
 		sqlStatement := `UPDATE incidents SET status = $2 WHERE id = $1;`
 		_, err := db.Exec(sqlStatement, id, status)
@@ -28,18 +28,18 @@ func InsertAlertUnique(alertname, startsAT, jobname, address, status string) int
 		}
 
 	} else {
-		id = InsertAlert(alertname, startsAT, jobname, address, status)
+		id = InsertAlert(alertname, startsAT, applicationID, address, status)
 
 	}
 	return id
 }
 
 // GetAlertID returns the alert id
-func GetAlertID(alertname, startsAT, jobname, address string) int {
+func GetAlertID(alertname, startsAT, applicationID, address string) int {
 	var id int
 
-	err := db.QueryRow(`SELECT id FROM incidents WHERE alertname = $1 and starts_at = $2 and jobname = $3 and address = $4`,
-		alertname, startsAT, jobname, address).Scan(&id)
+	err := db.QueryRow(`SELECT id FROM incidents WHERE alertname = $1 and starts_at = $2 and application_id = $3 and address = $4`,
+		alertname, startsAT, applicationID, address).Scan(&id)
 
 	if err == sql.ErrNoRows {
 		//log.Fatal("No Results Found")

@@ -21,8 +21,8 @@ func alertReceiver(receivedObj received) string {
 	return `{"status" : "was resolved"}`
 }
 
-func callTODoctor(id int, alertname, jobname string) string {
-	var jsonStr = []byte(`{"id":` + strconv.Itoa(id) + `, "alertname":"` + alertname + `", "jobname":"` + jobname + `"}`)
+func callTODoctor(id int, alertname, applicationID string) string {
+	var jsonStr = []byte(`{"id":` + strconv.Itoa(id) + `, "alertname":"` + alertname + `", "applicationID":"` + applicationID + `"}`)
 	req, err := http.NewRequest("POST", "/doctor", bytes.NewBuffer(jsonStr))
 	if err != nil {
 		return `{"status" : "reception failed"}`

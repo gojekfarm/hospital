@@ -4,11 +4,11 @@ import (
 	"hospital/storage"
 )
 
-func resolveAlert(alertID int, alertName, jobName string) string {
+func resolveAlert(alertID int, alertName, applicationID string) string {
 	script := storage.GetScript(alertName)
 
 	if script != "no script" {
-		storage.InsertOperation(alertID, jobName, script, "firing")
+		storage.InsertOperation(alertID, applicationID, script, "firing")
 		return "script found"
 	}
 

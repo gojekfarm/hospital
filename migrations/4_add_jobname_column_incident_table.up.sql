@@ -1,1 +1,1 @@
-alter table incidents add column jobname character varying(255);
+alter table incidents add column application_id character varying(255);
