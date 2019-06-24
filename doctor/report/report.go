@@ -16,20 +16,20 @@ func reportStatus(reportReq reportRequest) error {
 		log.Println(err1)
 	}
 
-	surgeonID, err2 := storage.GetSurgeonID(reportReq.ID)
+	applicationID, err2 := storage.GetApplicationID(reportReq.ID)
 	if err2 != nil {
 		log.Println(err2)
 	}
 
 	if err1 == nil && err2 == nil {
-		slackReport(surgeonID, alertname, reportReq.Status, reportReq.Logs)
+		slackReport(applicationID, alertname, reportReq.Status, reportReq.Logs)
 	}
 
 	err := storage.RecordStatus(reportReq.ID, reportReq.Status, reportReq.Logs)
 	return err
 }
 
-func slackReport(surgeonID, alertname, status, logs string) {
+func slackReport(applicationID, alertname, status, logs string) {
 	webhookURL := os.Getenv("SLACK_URL")
 
 	attachment1 := attachment{}
@@ -41,7 +41,7 @@ func slackReport(surgeonID, alertname, status, logs string) {
 	attachment1.Color = &color
 
 	attachment1.addField(field{Title: "Host Name",
-		Value: surgeonID,
+		Value: applicationID,
 		Short: true})
 
 	attachment1.addField(field{Title: "Alert Name",

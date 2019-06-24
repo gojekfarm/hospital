@@ -2,7 +2,7 @@ package storage
 
 // InsertOperation inserts operations
 func InsertOperation(alertID int, applicationID, script, status string) {
-	sqlStatement := `INSERT INTO operations (surgeon_id, script, status, alert_id)
+	sqlStatement := `INSERT INTO operations (application_id, script, status, alert_id)
 						VALUES ($1, $2, $3, $4)`
 	_, err := db.Exec(sqlStatement, applicationID, script, status, alertID)
 	if err != nil {
@@ -11,12 +11,12 @@ func InsertOperation(alertID int, applicationID, script, status string) {
 }
 
 // GetOperation returns the script.
-func GetOperation(surgeonID string) ([]*Operation, error) {
+func GetOperation(applicationID string) ([]*Operation, error) {
 	ops := make([]*Operation, 0)
 
 	rows, err := db.Query(
-		`SELECT id, script FROM operations WHERE surgeon_id = $1 and status = $2`,
-		surgeonID, "firing")
+		`SELECT id, script FROM operations WHERE application_id = $1 and status = $2`,
+		applicationID, "firing")
 	if err != nil {
 		return ops, err
 	}
@@ -69,16 +69,16 @@ func AlertNameFromOpID(id int) (string, error) {
 	return alertName, err
 }
 
-// GetSurgeonID returns the surgeonID of corresponding ID.
-func GetSurgeonID(id int) (string, error) {
-	var surgeonID string
+// GetApplicationID returns the applicationID of corresponding ID.
+func GetApplicationID(id int) (string, error) {
+	var applicationID string
 
-	err := db.QueryRow(`SELECT surgeon_id FROM operations WHERE id = $1`,
-		id).Scan(&surgeonID)
+	err := db.QueryRow(`SELECT application_id FROM operations WHERE id = $1`,
+		id).Scan(&applicationID)
 
 	if err != nil {
 		return "", err
 	}
 
-	return surgeonID, err
+	return applicationID, err
 }

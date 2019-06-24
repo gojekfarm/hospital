@@ -11,7 +11,7 @@ import (
 // ErrNoContent for timeout error.
 var ErrNoContent = errors.New("timeout")
 
-func getOperations(surgeonID string) ([]*storage.Operation, error) {
+func getOperations(applicationID string) ([]*storage.Operation, error) {
 	timeoutTime, err := strconv.Atoi(os.Getenv("REQUEST_TIMEOUT_SECONDS"))
 	if err != nil {
 		panic(err)
@@ -22,7 +22,7 @@ func getOperations(surgeonID string) ([]*storage.Operation, error) {
 		panic(err)
 	}
 
-	firedOpsStr, err := storage.GetOperation(surgeonID)
+	firedOpsStr, err := storage.GetOperation(applicationID)
 	if err != nil {
 		return make([]*storage.Operation, 0), err
 	}
@@ -43,7 +43,7 @@ func getOperations(surgeonID string) ([]*storage.Operation, error) {
 			return make([]*storage.Operation, 0), ErrNoContent
 
 		case <-ticker.C:
-			firedOpsStr, err := storage.GetOperation(surgeonID)
+			firedOpsStr, err := storage.GetOperation(applicationID)
 			if err != nil {
 				return make([]*storage.Operation, 0), err
 			}

@@ -5,12 +5,12 @@ import (
 )
 
 func resolveAlert(alertID int, alertName, applicationID string) string {
-	script := storage.GetScript(alertName)
-
-	if script != "no script" {
-		storage.InsertOperation(alertID, applicationID, script, "firing")
-		return "script found"
+	script, err := storage.GetScript(alertName)
+	if err != nil {
+		return "script not found"
 	}
 
-	return "script not found"
+	storage.InsertOperation(alertID, applicationID, script, "firing")
+
+	return "script found"
 }

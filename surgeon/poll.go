@@ -14,7 +14,7 @@ import (
 var errServer = errors.New("server error")
 
 func makeRequest() error {
-	var jsonStr = []byte(`{"surgeonID":"` + surgeonID + `"}`)
+	var jsonStr = []byte(`{"applicationID":"` + applicationID + `"}`)
 	req, err := http.NewRequest("GET", url+routes.OperationAPIPath, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		log.Println(err)

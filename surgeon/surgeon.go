@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	surgeonID = os.Getenv("SURGEON_ID")
-	url       = os.Getenv("HOST_PROTOCOL") + "://" + os.Getenv("HOST_ADDRESS") +
+	applicationID = os.Getenv("APPLICATION_ID")
+	url           = os.Getenv("HOST_PROTOCOL") + "://" + os.Getenv("HOST_ADDRESS") +
 		":" + os.Getenv("PORT")
 )
 

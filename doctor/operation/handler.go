@@ -25,7 +25,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		ops, err := getOperations(oprequest.SurgeonID)
+		ops, err := getOperations(oprequest.ApplicationID)
 		if err != nil {
 			if err == ErrNoContent {
 				http.Error(w, "Poll time over.", http.StatusNoContent)
@@ -50,5 +50,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 type operationRequest struct {
-	SurgeonID string `json:"surgeonID"`
+	ApplicationID string `json:"applicationID"`
 }
