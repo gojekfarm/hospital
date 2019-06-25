@@ -14,8 +14,18 @@ import (
 var errServer = errors.New("Server error")
 
 func MakeRequest() error {
-	var jsonStr = []byte(`{"applicationID":"` + applicationID + `"}`)
-	req, err := http.NewRequest("GET", url+routes.OperationAPIPath, bytes.NewBuffer(jsonStr))
+	response := struct {
+		ApplicationID string `json:"applicationID"`
+	}{
+		ApplicationID: applicationID,
+	}
+
+	responseJSON, err := json.Marshal(response)
+	if err != nil {
+		log.Println(err)
+	}
+
+	req, err := http.NewRequest("GET", url+routes.OperationAPIPath, bytes.NewBuffer(responseJSON))
 	if err != nil {
 		log.Println(err)
 	}

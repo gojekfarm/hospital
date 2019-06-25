@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -13,7 +14,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		body, _ := ioutil.ReadAll(r.Body)
 
-		var receivedObject received
+		var receivedObject AlertReceived
 		err := json.Unmarshal(body, &receivedObject)
 		if err != nil {
 			fmt.Println(err)
@@ -22,7 +23,19 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		resp := alertReceiver(receivedObject)
-		fmt.Fprintf(w, resp)
+
+		response := struct {
+			Status string `json:"status"`
+		}{
+			Status: resp,
+		}
+
+		responseJSON, err := json.Marshal(response)
+		if err != nil {
+			log.Println(err)
+		}
+
+		fmt.Fprintf(w, string(responseJSON))
 	default:
 		fmt.Fprintf(w, "Only post methods supported.")
 	}

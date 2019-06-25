@@ -4,13 +4,13 @@ import (
 	"hospital/storage"
 )
 
-func resolveAlert(alertID int, alertName, applicationID string) string {
+// ResolveAlert receives alert from reception and generate operations.
+func ResolveAlert(alertID int, alertName, applicationID string) error {
 	script, err := storage.GetScript(alertName)
 	if err != nil {
-		return "script not found"
+		return err
 	}
 
 	storage.InsertOperation(alertID, applicationID, script, "firing")
-
-	return "script found"
+	return nil
 }
