@@ -19,6 +19,7 @@ import (
 
 func TestReceptionFiring(t *testing.T) {
 	storage.Initialize()
+	db := storage.ReturnDbInstance()
 
 	lable := reception.Label{Alertname: "test", Instance: "test", Job: "receptiontest"}
 	alert := reception.Alert{Status: "firing", StartsAt: "test", Labels: lable}
