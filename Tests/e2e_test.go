@@ -12,8 +12,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"os"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -21,6 +19,8 @@ import (
 
 func TestReceptionFiring(t *testing.T) {
 	storage.Initialize()
+	db := storage.ReturnDbInstance()
+
 	var jsonStr = []byte(`{"receiver":"pepper","status":"firing","alerts":[{"status":"firing","labels":{"alertname":"test","backend":"localnodes","instance":"test","job":"receptiontest","severity":"page"},"annotations":{"summary":"Current queue is greater than 100"},"startsAt":"test","endsAt":"0001-01-01T00:00:00Z","generatorURL":"http://Dilips-MacBook-Pro.local:9090/graph?g0.expr=haproxy_backend_current_queue%7Bbackend%3D%22localnodes%22%2Cinstance%3D%22localhost%3A9101%22%2Cjob%3D%22haproxy%22%7D+%3E+100\u0026g0.tab=1"}],"groupLabels":{},"commonLabels":{"alertname":"queue_exceed","backend":"localnodes","instance":"localhost:9101","job":"haproxy","severity":"page"},"commonAnnotations":{"summary":"Current queue is greater than 100"},"externalURL":"http://Dilips-MacBook-Pro.local:9093","version":"4","groupKey":"{}:{}"}
 	`)
 	req, err := http.NewRequest("POST", "/reception", bytes.NewBuffer(jsonStr))
@@ -45,10 +45,11 @@ func TestReceptionFiring(t *testing.T) {
 		t.Errorf("alert send failed")
 	}
 
-	err = storage.DeleteOps("receptiontest")
+	_, err = db.Exec("DELETE FROM operations WHERE application_id = $1", "receptiontest")
 	if err != nil {
 		panic(err)
 	}
+
 }
 
 func TestReceptionResolved(t *testing.T) {
@@ -79,50 +80,53 @@ func TestReceptionResolved(t *testing.T) {
 }
 
 func TestSurgeon(t *testing.T) {
-	applicationID := "surgeontest"
-	script := "ls"
+	surgeon.ApplicationID = "surgeontest"
+	script := "echo \"e2e tests\""
 
 	storage.Initialize()
+	db := storage.ReturnDbInstance()
 	err := storage.InsertScript("test", script)
 	if err != nil {
 		panic(err)
 	}
 
-	opInsertedID := storage.InsertOperation(-1, applicationID, script, "firing")
+	operationID := storage.InsertOperation(-1, surgeon.ApplicationID, script, "firing")
 
 	var mux = http.NewServeMux()
 	mux.HandleFunc(routes.OperationAPIPath, operation.Handler)
 	mux.HandleFunc(routes.ReportAPIPath, report.Handler)
 
-	srv := httptest.NewServer(mux)
-	defer srv.Close()
+	testServer := httptest.NewServer(mux)
+	defer testServer.Close()
 
-	urls := strings.Split(srv.URL, ":")
-
-	port := os.Getenv("PORT")
-	os.Setenv("PORT", urls[2])
-	defer os.Setenv("PORT", port)
-
-	oldApplicationID := os.Getenv("APPLICATION_ID")
-	os.Setenv("APPLICATION_ID", applicationID)
-	defer os.Setenv("APPLICATION_ID", oldApplicationID)
-
-	surgeon.SetVariableFromEnv()
+	surgeon.HospitalURL = testServer.URL
 
 	err = surgeon.MakeRequest()
-
 	if err != nil {
 		panic(err)
 	}
 
-	status, err := storage.GetOpStatus(opInsertedID)
+	var logs string
+	err = db.QueryRow(`SELECT logs FROM operations WHERE id = $1`,
+		operationID).Scan(&logs)
 	if err != nil {
 		panic(err)
 	}
 
+	// Checking if desired status is found or not.
+	assert.Equal(t, "e2e tests\n", logs, "\"e2e tests\" is expected in logs")
+
+	var status string
+	err = db.QueryRow(`SELECT status FROM operations WHERE id = $1`,
+		operationID).Scan(&status)
+	if err != nil {
+		panic(err)
+	}
+
+	// Checking if desired status is found or not.
 	assert.Equal(t, "completed", status, "completed status is expected")
 
-	err = storage.DeleteOps(applicationID)
+	_, err = db.Exec("DELETE FROM operations WHERE application_id = $1", surgeon.ApplicationID)
 	if err != nil {
 		panic(err)
 	}
