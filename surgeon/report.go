@@ -17,7 +17,7 @@ func makeReport(id int, status, logs string) {
 		log.Println(err)
 	}
 
-	req, err := http.NewRequest("POST", url+routes.ReportAPIPath, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequest("POST", HospitalURL+routes.ReportAPIPath, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		log.Println(err)
 	}

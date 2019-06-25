@@ -79,28 +79,5 @@ func GetApplicationID(id int) (string, error) {
 	err := db.QueryRow(`SELECT application_id FROM operations WHERE id = $1`,
 		id).Scan(&applicationID)
 
-	if err != nil {
-		return "", err
-	}
-
 	return applicationID, err
-}
-
-// GetOpStatus return status of an operation.
-func GetOpStatus(id int) (string, error) {
-	var status string
-
-	err := db.QueryRow(`SELECT status FROM operations WHERE id = $1`,
-		id).Scan(&status)
-
-	if err != nil {
-		return "", err
-	}
-
-	return status, err
-}
-
-func DeleteOps(applicationID string) error {
-	_, err := db.Exec("DELETE FROM operations WHERE application_id = $1", applicationID)
-	return err
 }

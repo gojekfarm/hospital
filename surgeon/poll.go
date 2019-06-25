@@ -17,7 +17,7 @@ func MakeRequest() error {
 	response := struct {
 		ApplicationID string `json:"applicationID"`
 	}{
-		ApplicationID: applicationID,
+		ApplicationID: ApplicationID,
 	}
 
 	responseJSON, err := json.Marshal(response)
@@ -25,7 +25,7 @@ func MakeRequest() error {
 		log.Println(err)
 	}
 
-	req, err := http.NewRequest("GET", url+routes.OperationAPIPath, bytes.NewBuffer(responseJSON))
+	req, err := http.NewRequest("GET", HospitalURL+routes.OperationAPIPath, bytes.NewBuffer(responseJSON))
 	if err != nil {
 		log.Println(err)
 	}
@@ -49,7 +49,7 @@ func MakeRequest() error {
 			log.Println(err)
 		}
 
-		RunScripts(ops)
+		runScripts(ops)
 	} else if resp.StatusCode == 204 {
 		log.Println("No operations to execute.")
 	} else {
@@ -59,7 +59,7 @@ func MakeRequest() error {
 }
 
 // RunScripts runs all operations in script.
-func RunScripts(ops []Operation) {
+func runScripts(ops []Operation) {
 	for _, op := range ops {
 		cmd := exec.Command("sh", "-c", op.Script)
 		var stdout, stderr bytes.Buffer

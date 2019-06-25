@@ -50,6 +50,11 @@ func Initialize() {
 
 }
 
+// ReturnDbInstance returns a pointer to this db connection.
+func ReturnDbInstance() *sql.DB {
+	return db
+}
+
 // Ping check connection to DB
 func Ping() {
 	err := db.Ping()

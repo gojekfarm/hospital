@@ -10,8 +10,11 @@ import (
 )
 
 var (
-	applicationID = os.Getenv("APPLICATION_ID")
-	url           = os.Getenv("HOST_PROTOCOL") + "://" + os.Getenv("HOST_ADDRESS") +
+	// ApplicationID is exported because it's overriden in e2e tests.
+	ApplicationID = os.Getenv("APPLICATION_ID")
+
+	// HospitalURL is exported because it's overriden in e2e tests.
+	HospitalURL = os.Getenv("HOST_PROTOCOL") + "://" + os.Getenv("HOST_ADDRESS") +
 		":" + os.Getenv("PORT")
 )
 
@@ -52,11 +55,4 @@ func LongPolling() {
 
 	}
 
-}
-
-// SetVariableFromEnv set the variables from env.
-func SetVariableFromEnv() {
-	applicationID = os.Getenv("APPLICATION_ID")
-	url = os.Getenv("HOST_PROTOCOL") + "://" + os.Getenv("HOST_ADDRESS") +
-		":" + os.Getenv("PORT")
 }
