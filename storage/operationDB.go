@@ -1,13 +1,16 @@
 package storage
 
 // InsertOperation inserts operations
-func InsertOperation(alertID int, applicationID, script, status string) {
+func InsertOperation(alertID int, applicationID, script, status string) int {
+	lastInsertID := 0
 	sqlStatement := `INSERT INTO operations (application_id, script, status, alert_id)
-						VALUES ($1, $2, $3, $4)`
-	_, err := db.Exec(sqlStatement, applicationID, script, status, alertID)
+						VALUES ($1, $2, $3, $4) RETURNING id`
+	err := db.QueryRow(sqlStatement, applicationID, script, status, alertID).Scan(&lastInsertID)
 	if err != nil {
 		panic(err)
 	}
+
+	return lastInsertID
 }
 
 // GetOperation returns the script.
@@ -81,4 +84,23 @@ func GetApplicationID(id int) (string, error) {
 	}
 
 	return applicationID, err
+}
+
+// GetOpStatus return status of an operation.
+func GetOpStatus(id int) (string, error) {
+	var status string
+
+	err := db.QueryRow(`SELECT status FROM operations WHERE id = $1`,
+		id).Scan(&status)
+
+	if err != nil {
+		return "", err
+	}
+
+	return status, err
+}
+
+func DeleteOps(applicationID string) error {
+	_, err := db.Exec("DELETE FROM operations WHERE application_id = $1", applicationID)
+	return err
 }

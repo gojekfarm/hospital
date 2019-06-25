@@ -18,7 +18,7 @@ func GetScript(alertType string) (string, error) {
 func InsertScript(alertType, script string) error {
 	_, err := GetScript(alertType)
 	if err != nil {
-		sqlStatement := `INSERT INTO incidents (alert_type, script)
+		sqlStatement := `INSERT INTO mapping (alert_type, script)
 						VALUES ($1, $2)`
 		_, err = db.Exec(sqlStatement, alertType, script)
 		return err

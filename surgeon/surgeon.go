@@ -36,7 +36,7 @@ func LongPolling() {
 	}
 
 	for {
-		err := makeRequest()
+		err := MakeRequest()
 
 		rand.Seed(time.Now().UTC().UnixNano())
 
@@ -52,4 +52,11 @@ func LongPolling() {
 
 	}
 
+}
+
+// SetVariableFromEnv set the variables from env.
+func SetVariableFromEnv() {
+	applicationID = os.Getenv("APPLICATION_ID")
+	url = os.Getenv("HOST_PROTOCOL") + "://" + os.Getenv("HOST_ADDRESS") +
+		":" + os.Getenv("PORT")
 }

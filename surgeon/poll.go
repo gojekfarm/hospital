@@ -11,9 +11,9 @@ import (
 	"os/exec"
 )
 
-var errServer = errors.New("server error")
+var errServer = errors.New("Server error")
 
-func makeRequest() error {
+func MakeRequest() error {
 	var jsonStr = []byte(`{"applicationID":"` + applicationID + `"}`)
 	req, err := http.NewRequest("GET", url+routes.OperationAPIPath, bytes.NewBuffer(jsonStr))
 	if err != nil {
@@ -33,13 +33,13 @@ func makeRequest() error {
 
 	if resp.StatusCode == 200 {
 
-		var ops []operation
+		var ops []Operation
 		err := json.Unmarshal(body, &ops)
 		if err != nil {
 			log.Println(err)
 		}
 
-		runScripts(ops)
+		RunScripts(ops)
 	} else if resp.StatusCode == 204 {
 		log.Println("No operations to execute.")
 	} else {
@@ -48,7 +48,8 @@ func makeRequest() error {
 	return nil
 }
 
-func runScripts(ops []operation) {
+// RunScripts runs all operations in script.
+func RunScripts(ops []Operation) {
 	for _, op := range ops {
 		cmd := exec.Command("sh", "-c", op.Script)
 		var stdout, stderr bytes.Buffer
@@ -57,7 +58,7 @@ func runScripts(ops []operation) {
 
 		err := cmd.Run()
 
-		outStr, errStr := string(stdout.Bytes()), string(stderr.Bytes())
+		outStr, errStr := stdout.String(), stderr.String()
 
 		exitCode := 0
 		if err != nil {
@@ -78,39 +79,7 @@ func runScripts(ops []operation) {
 	}
 }
 
-type operation struct {
+type Operation struct {
 	ID     int    `json:"id"`
 	Script string `json:"script"`
-}
-
-func makeReport(id int, status, logs string) {
-	reqBody := reportReq{id, status, logs}
-
-	jsonStr, err := json.Marshal(reqBody)
-	if err != nil {
-		log.Println(err)
-	}
-
-	req, err := http.NewRequest("POST", url+routes.ReportAPIPath, bytes.NewBuffer(jsonStr))
-	if err != nil {
-		log.Println(err)
-	}
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Println(err)
-	}
-	defer resp.Body.Close()
-
-	body, _ := ioutil.ReadAll(resp.Body)
-
-	log.Println(string(body))
-}
-
-type reportReq struct {
-	ID     int    `json:"id"`
-	Status string `json:"status"`
-	Logs   string `json:"logs"`
 }
