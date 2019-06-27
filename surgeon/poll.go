@@ -13,6 +13,7 @@ import (
 
 var errServer = errors.New("Server error")
 
+// MakeRequest in used for getting the operations and then executing them.
 func MakeRequest() error {
 	response := struct {
 		ApplicationID string `json:"applicationID"`
