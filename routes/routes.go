@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"hospital/dashboard"
 	"hospital/doctor/operation"
 	"hospital/doctor/report"
 	"hospital/healthcheck"
@@ -26,4 +27,8 @@ func Routes() {
 	http.HandleFunc(ReceptionAPIPath, reception.Handler)
 	http.HandleFunc(ReportAPIPath, report.Handler)
 	http.HandleFunc(OperationAPIPath, operation.Handler)
+
+	http.HandleFunc("/", dashboard.Handler)
+	http.HandleFunc("/dashboard/insert", dashboard.InsertHandler)
+	http.HandleFunc("/dashboard/remove/", dashboard.RemoveHandler)
 }
