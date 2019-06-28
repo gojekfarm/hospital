@@ -28,7 +28,7 @@ func Routes() {
 	http.HandleFunc(ReportAPIPath, report.Handler)
 	http.HandleFunc(OperationAPIPath, operation.Handler)
 
-	http.HandleFunc("/", dashboard.Handler)
+	http.HandleFunc("/dashboard", dashboard.Handler)
 	http.HandleFunc("/dashboard/insert", dashboard.InsertHandler)
 	http.HandleFunc("/dashboard/remove/", dashboard.RemoveHandler)
 }

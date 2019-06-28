@@ -15,7 +15,16 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		log.Println("GetMappings: " + err.Error())
 	}
 	t, _ := template.ParseFiles("dashboard/views/home.html", "dashboard/views/header.html", "dashboard/views/footer.html")
-	t.Execute(w, mappings)
+
+	resp := struct {
+		Page string
+		Maps []*storage.Mapping
+	}{
+		"active",
+		mappings,
+	}
+
+	t.Execute(w, resp)
 }
 
 // InsertHandler for adding mapings.
@@ -30,7 +39,7 @@ func InsertHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, "/dashboard", http.StatusFound)
 }
 
 // RemoveHandler for removing a mapping.
@@ -44,5 +53,5 @@ func RemoveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, "/dashboard", http.StatusFound)
 }
