@@ -2,11 +2,11 @@
 
 ## Table of contents
 
-  - [Introduction](#Introduction)
-  - [Motivation](#Motivation)
-  - [Components](#Components)
-  - [Working Overview](#Working-Overview)
-  - [Technical Specs](#Technical-Specs)
+  * [Introduction](#introduction)
+  * [Motivation](#motivation)
+  * [Components](#components)
+  * [Working Overview](#working-overview)
+  * [Technical Specs](#technical-specs)
 
 ## Introduction
 
