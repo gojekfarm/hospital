@@ -37,9 +37,11 @@
                   </ul>
                   
                 </div>
-                <span class="navbar-text">
+                {{if eq .Page "mapping"}}
+                  <span class="navbar-text">
                         <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#myModal">Add Mapping</button>
                   </span>
+                {{end}}
               </nav>
 
 {{ end }}
