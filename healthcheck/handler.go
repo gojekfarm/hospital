@@ -6,6 +6,6 @@ import (
 )
 
 // Handler gives response pong.
-func Handler(w http.ResponseWriter, r *http.Request) {
+func Handle(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Pong")
 }

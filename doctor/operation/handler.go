@@ -9,7 +9,7 @@ import (
 )
 
 // Handler recieves alerts.
-func Handler(w http.ResponseWriter, r *http.Request) {
+func Handle(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 

@@ -81,3 +81,39 @@ func GetApplicationID(id int) (string, error) {
 
 	return applicationID, err
 }
+
+// GetLogs give list of logs present in the table.
+func GetLogs() ([]*Logs, error) {
+	logs := make([]*Logs, 0)
+
+	rows, err := db.Query(
+		`SELECT  application_id, script, status, logs FROM operations`)
+	if err != nil {
+		return logs, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var (
+			applicationID string
+			script        string
+			status        string
+			log           string
+		)
+
+		if err := rows.Scan(&applicationID, &script, &status, &log); err != nil {
+			return logs, err
+		}
+		logs = append(logs, &Logs{applicationID, script, status, log})
+	}
+
+	return logs, nil
+}
+
+// Logs struct for getting all entries in table.
+type Logs struct {
+	ApplicationID string
+	Script        string
+	Status        string
+	Logs          string
+}

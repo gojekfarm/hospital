@@ -1,1 +1,1 @@
-alter table operations add column logs text default NULL;
+alter table operations add column logs text default 'NA';

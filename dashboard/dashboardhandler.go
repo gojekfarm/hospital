@@ -8,27 +8,27 @@ import (
 	"text/template"
 )
 
-// Handler for dashboard.
-func Handler(w http.ResponseWriter, r *http.Request) {
+// HandleDashboard for dashboard.
+func HandleDashboard(w http.ResponseWriter, r *http.Request) {
 	mappings, err := storage.GetMappings()
 	if err != nil {
 		log.Println("GetMappings: " + err.Error())
 	}
-	t, _ := template.ParseFiles("dashboard/views/home.html", "dashboard/views/header.html", "dashboard/views/footer.html")
+	t, _ := template.ParseFiles("dashboard/views/home.tpl", "dashboard/views/header.tpl", "dashboard/views/footer.tpl")
 
 	resp := struct {
 		Page string
 		Maps []*storage.Mapping
 	}{
-		"active",
+		"mapping",
 		mappings,
 	}
 
 	t.Execute(w, resp)
 }
 
-// InsertHandler for adding mapings.
-func InsertHandler(w http.ResponseWriter, r *http.Request) {
+// HandleInsert for adding mapings.
+func HandleInsert(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	if r.FormValue("alert") != "" && r.FormValue("script") != "" {
@@ -42,8 +42,8 @@ func InsertHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/dashboard", http.StatusFound)
 }
 
-// RemoveHandler for removing a mapping.
-func RemoveHandler(w http.ResponseWriter, r *http.Request) {
+// HandleRemove for removing a mapping.
+func HandleRemove(w http.ResponseWriter, r *http.Request) {
 	alertType := r.URL.Path[18:]
 
 	err := storage.DeleteMapping(alertType)

@@ -35,7 +35,7 @@ func TestReceptionFiring(t *testing.T) {
 		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(reception.Handler)
+	handler := http.HandlerFunc(reception.Handle)
 
 	handler.ServeHTTP(rr, req)
 
@@ -75,7 +75,7 @@ func TestReceptionResolved(t *testing.T) {
 		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(reception.Handler)
+	handler := http.HandlerFunc(reception.Handle)
 
 	handler.ServeHTTP(rr, req)
 
@@ -107,8 +107,8 @@ func TestSurgeon(t *testing.T) {
 	operationID := storage.InsertOperation(-1, surgeon.ApplicationID, script, "firing")
 
 	var mux = http.NewServeMux()
-	mux.HandleFunc(routes.OperationAPIPath, operation.Handler)
-	mux.HandleFunc(routes.ReportAPIPath, report.Handler)
+	mux.HandleFunc(routes.OperationAPIPath, operation.Handle)
+	mux.HandleFunc(routes.ReportAPIPath, report.Handle)
 
 	testServer := httptest.NewServer(mux)
 	defer testServer.Close()

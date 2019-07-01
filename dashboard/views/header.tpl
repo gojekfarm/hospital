@@ -21,11 +21,18 @@
                 <div class="collapse navbar-collapse" id="navbarText">
                   <ul class="navbar-nav">
                     <li class="nav-item">
-                        
-                            <a class="nav-link " href="#">Mapping</a>
+                        {{if eq .Page "mapping"}}
+                          <a class="nav-link active" href="/dashboard">Mapping</a>
+                        {{else}}
+                          <a class="nav-link" href="/dashboard">Mapping</a>
+                        {{end}}
                     </li>
                     <li class="nav-item ">
-                            <a class="nav-link" href="#">Logs</a>
+                        {{if eq .Page "logs"}}
+                            <a class="nav-link active" href="/dashboard/logs">Logs</a>
+                        {{else}}
+                          <a class="nav-link" href="/dashboard/logs">Logs</a>
+                        {{end}}
                     </li>
                   </ul>
                   

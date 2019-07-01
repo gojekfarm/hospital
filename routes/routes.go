@@ -23,12 +23,13 @@ var (
 
 //Routes handles our whole routing and server
 func Routes() {
-	http.HandleFunc(PingAPIPath, healthcheck.Handler)
-	http.HandleFunc(ReceptionAPIPath, reception.Handler)
-	http.HandleFunc(ReportAPIPath, report.Handler)
-	http.HandleFunc(OperationAPIPath, operation.Handler)
+	http.HandleFunc(PingAPIPath, healthcheck.Handle)
+	http.HandleFunc(ReceptionAPIPath, reception.Handle)
+	http.HandleFunc(ReportAPIPath, report.Handle)
+	http.HandleFunc(OperationAPIPath, operation.Handle)
 
-	http.HandleFunc("/dashboard", dashboard.Handler)
-	http.HandleFunc("/dashboard/insert", dashboard.InsertHandler)
-	http.HandleFunc("/dashboard/remove/", dashboard.RemoveHandler)
+	http.HandleFunc("/dashboard", dashboard.HandleDashboard)
+	http.HandleFunc("/dashboard/logs", dashboard.HandleLogs)
+	http.HandleFunc("/dashboard/insert", dashboard.HandleInsert)
+	http.HandleFunc("/dashboard/remove/", dashboard.HandleRemove)
 }

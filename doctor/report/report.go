@@ -48,9 +48,9 @@ func slackReport(applicationID, alertname, status, logs string) {
 		Value: alertname,
 		Short: true})
 
-	if size := len(logs); size > 50 {
-		logs = logs[size-50:]
-	}
+	// if size := len(logs); size > 50 {
+	// 	logs = logs[size-50:]
+	// }
 
 	attachment1.addField(field{Title: "Logs",
 		Value: "`" + "`" + "`" + logs + "`" + "`" + "`",

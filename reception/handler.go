@@ -8,13 +8,12 @@ import (
 	"net/http"
 )
 
-// Handler recieves alerts
-func Handler(w http.ResponseWriter, r *http.Request) {
+// Handle recieves alerts
+func Handle(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 		body, _ := ioutil.ReadAll(r.Body)
 		log.Println(string(body))
-		return
 
 		var receivedObject AlertReceived
 		err := json.Unmarshal(body, &receivedObject)
@@ -24,7 +23,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		resp := alertReceiver(receivedObject)
+		resp := receiveAlert(receivedObject)
 
 		response := struct {
 			Status string `json:"status"`

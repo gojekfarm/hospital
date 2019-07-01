@@ -8,8 +8,8 @@ import (
 	"net/http"
 )
 
-// Handler for /report
-func Handler(w http.ResponseWriter, r *http.Request) {
+// Handle for /report
+func Handle(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 

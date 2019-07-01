@@ -7,7 +7,7 @@ import (
 	"hospital/storage"
 )
 
-func alertReceiver(receivedObj AlertReceived) string {
+func receiveAlert(receivedObj AlertReceived) string {
 	id := storage.InsertAlertUnique(receivedObj.Alerts[0].Labels.Alertname,
 		receivedObj.Alerts[0].StartsAt, receivedObj.Alerts[0].Labels.Job, receivedObj.Alerts[0].Labels.Instance, receivedObj.Alerts[0].Status)
 
