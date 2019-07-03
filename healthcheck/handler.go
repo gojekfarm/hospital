@@ -2,6 +2,7 @@ package healthcheck
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
