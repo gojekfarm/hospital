@@ -14,12 +14,15 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 
 	case "GET":
-		body, _ := ioutil.ReadAll(r.Body)
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			log.Println(err)
+			return
+		}
 
 		var oprequest operationRequest
-
-		err := json.Unmarshal(body, &oprequest)
-		if err != nil {
+		if err = json.Unmarshal(body, &oprequest); err != nil {
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			log.Println(err)
 			return
@@ -28,15 +31,16 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 		ops, err := getOperations(oprequest.ApplicationID)
 		if err != nil {
 			if err == ErrNoContent {
-				http.Error(w, "Poll time over.", http.StatusNoContent)
+				w.WriteHeader(http.StatusNoContent)
+				fmt.Fprintln(w, "Polling timeout")
 				return
 			}
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			log.Println(err)
 			return
 		}
 
 		jsonStr, err := json.Marshal(ops)
-
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
@@ -45,6 +49,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, string(jsonStr))
 
 	default:
+		http.Error(w, http.StatusText(http.StatusNotAcceptable), http.StatusNotAcceptable)
 		fmt.Fprintf(w, "Only get method supported.")
 	}
 }
