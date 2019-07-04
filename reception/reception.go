@@ -8,13 +8,13 @@ import (
 )
 
 func receiveAlert(receivedObj AlertReceived) string {
-	id := storage.InsertAlertUnique(receivedObj.Alerts[0].Labels.Alertname,
-		receivedObj.Alerts[0].StartsAt, receivedObj.Alerts[0].Labels.Job, receivedObj.Alerts[0].Labels.Instance, receivedObj.Alerts[0].Status)
+	id := storage.InsertAlertUnique(receivedObj.Message,
+		receivedObj.Time, receivedObj.ID, receivedObj.Level)
 
-	if receivedObj.Alerts[0].Status == "firing" {
-		return callTODoctor(id, receivedObj.Alerts[0].Labels.Alertname, receivedObj.Alerts[0].Labels.Job)
+	if receivedObj.PreviousLevel == "OK" {
+		return callTODoctor(id, receivedObj.Message, receivedObj.ID)
 	}
-	return "was resolved"
+	return "was OK"
 }
 
 func callTODoctor(id int, alertname, applicationID string) string {
@@ -22,37 +22,17 @@ func callTODoctor(id int, alertname, applicationID string) string {
 	if err != nil {
 		log.Println(err)
 	}
-	return "was firing"
+	return "was CRITICAL"
 }
 
 // AlertReceived struct exported.
 type AlertReceived struct {
-	Receiver          string                   `json:"reciever"`
-	Status            string                   `json:"status"`
-	Alerts            []Alert                  `json:"alerts"`
-	GroupLabels       string                   `json:"groupLables"`
-	CommonLabels      string                   `json:"commonLables"`
-	CommonAnnotations struct{ Summary string } `json:"commonAnnotations"`
-	ExternalURL       string                   `json:"externalURL"`
-	Version           string                   `json:"version"`
-	GroupKey          string                   `json:"groupKey"`
-}
-
-// Alert struct exported.
-type Alert struct {
-	Status       string                   `json:"status"`
-	Labels       Label                    `json:"labels"`
-	Annotations  struct{ Summary string } `json:"annotations"`
-	StartsAt     string                   `json:"startsAT"`
-	EndsAt       string                   `json:"endsAT"`
-	GeneratorURL string                   `json:"generatorURL"`
-}
-
-// Label struct exported.
-type Label struct {
-	Alertname string `json:"alertname"`
-	Backend   string `json:"backend"`
-	Instance  string `json:"instance"`
-	Job       string `json:"job"`
-	Severity  string `json:"severity"`
+	ID            string `json:"id"`
+	Message       string `json:"message"`
+	Details       string `json:"details"`
+	Time          string `json:"time"`
+	Duration      string `json:"-"`
+	Level         string `json:"level"`
+	Data          string `json:"-"`
+	PreviousLevel string `json:"previousLevel"`
 }

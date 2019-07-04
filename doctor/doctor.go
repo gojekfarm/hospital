@@ -11,6 +11,6 @@ func ResolveAlert(alertID int, alertName, applicationID string) error {
 		return err
 	}
 
-	storage.InsertOperation(alertID, applicationID, script, "firing")
+	storage.InsertOperation(alertID, applicationID, script, "CRITICAL")
 	return nil
 }

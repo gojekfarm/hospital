@@ -19,7 +19,7 @@ func GetOperation(applicationID string) ([]*Operation, error) {
 
 	rows, err := db.Query(
 		`SELECT id, script FROM operations WHERE application_id = $1 and status = $2`,
-		applicationID, "firing")
+		applicationID, "CRITICAL")
 	if err != nil {
 		return ops, err
 	}

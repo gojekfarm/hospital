@@ -17,13 +17,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestReceptionFiring(t *testing.T) {
+func TestReceptionCRITICAL(t *testing.T) {
 	storage.Initialize()
 	db := storage.ReturnDbInstance()
 
-	lable := reception.Label{Alertname: "test", Instance: "test", Job: "receptiontest"}
-	alert := reception.Alert{Status: "firing", StartsAt: "test", Labels: lable}
-	var respAlert = reception.AlertReceived{Alerts: []reception.Alert{alert}}
+	var respAlert = reception.AlertReceived{ID: "receptiontest", Message: "test", Level: "CRITICAL", Time: "test", PreviousLevel: "OK"}
 
 	jsonStr, err := json.Marshal(&respAlert)
 	if err != nil {
@@ -47,7 +45,7 @@ func TestReceptionFiring(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expected := "was firing"
+	expected := "was CRITICAL"
 	if resp.Status != expected {
 		t.Errorf("alert send failed")
 	}
@@ -59,11 +57,10 @@ func TestReceptionFiring(t *testing.T) {
 
 }
 
-func TestReceptionResolved(t *testing.T) {
+func TestReceptionOK(t *testing.T) {
 	storage.Initialize()
-	lable := reception.Label{Alertname: "test", Instance: "test", Job: "receptiontest"}
-	alert := reception.Alert{Status: "resolved", StartsAt: "test", Labels: lable}
-	var respAlert = reception.AlertReceived{Alerts: []reception.Alert{alert}}
+
+	var respAlert = reception.AlertReceived{ID: "receptiontest", Message: "test", Level: "OK", Time: "test", PreviousLevel: "CRITICAL"}
 
 	jsonStr, err := json.Marshal(&respAlert)
 	if err != nil {
@@ -87,7 +84,7 @@ func TestReceptionResolved(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expected := "was resolved"
+	expected := "was OK"
 	if resp.Status != expected {
 		t.Errorf("alert send failed")
 	}
@@ -104,7 +101,7 @@ func TestSurgeon(t *testing.T) {
 		panic(err)
 	}
 
-	operationID := storage.InsertOperation(-1, surgeon.ApplicationID, script, "firing")
+	operationID := storage.InsertOperation(-1, surgeon.ApplicationID, script, "CRITICAL")
 
 	var mux = http.NewServeMux()
 	mux.HandleFunc(routes.OperationAPIPath, operation.Handle)
