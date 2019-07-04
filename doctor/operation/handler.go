@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// Handler recieves alerts.
+// Handle receives alerts.
 func Handle(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
