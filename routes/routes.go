@@ -32,4 +32,5 @@ func Routes() {
 	http.HandleFunc("/dashboard/logs", dashboard.HandleLogs)
 	http.HandleFunc("/dashboard/insert", dashboard.HandleInsert)
 	http.HandleFunc("/dashboard/remove/", dashboard.HandleRemove)
+	http.HandleFunc("/dashboard/summary", dashboard.HandleRemove)
 }
