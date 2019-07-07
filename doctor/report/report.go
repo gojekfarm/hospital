@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 func reportStatus(reportReq reportRequest) error {
@@ -22,14 +23,14 @@ func reportStatus(reportReq reportRequest) error {
 	}
 
 	if err1 == nil && err2 == nil {
-		slackReport(applicationID, alertname, reportReq.Status, reportReq.Logs)
+		slackReport(applicationID, alertname, reportReq.Status, reportReq.Logs, reportReq.ID)
 	}
 
 	err := storage.RecordStatus(reportReq.ID, reportReq.Status, reportReq.Logs)
 	return err
 }
 
-func slackReport(applicationID, alertname, status, logs string) {
+func slackReport(applicationID, alertname, status, logs string, id int) {
 	webhookURL := os.Getenv("SLACK_URL")
 
 	attachment1 := attachment{}
@@ -48,9 +49,10 @@ func slackReport(applicationID, alertname, status, logs string) {
 		Value: alertname,
 		Short: true})
 
-	// if size := len(logs); size > 50 {
-	// 	logs = logs[size-50:]
-	// }
+	if size := len(logs); size > 50 {
+		logs = logs[size-50:]
+		logs += "<" + webhookURL + "/dashboard/logs/" + strconv.Itoa(id) + ">"
+	}
 
 	if logs == "" {
 		logs = "no logs!"

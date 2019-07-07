@@ -36,9 +36,9 @@
                     </li>
                     <li class="nav-item ">
                         {{if eq .Page "summary"}}
-                            <a class="nav-link active" href="/dashboard/summary">Logs</a>
+                            <a class="nav-link active" href="/dashboard/summary">Summary</a>
                         {{else}}
-                          <a class="nav-link" href="/dashboard/summary">Logs</a>
+                          <a class="nav-link" href="/dashboard/summary">Summary</a>
                         {{end}}
                     </li>
                   </ul>

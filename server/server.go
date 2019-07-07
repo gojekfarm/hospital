@@ -12,9 +12,9 @@ import (
 func StartServer() {
 	storage.Initialize()
 
-	routes.Routes()
+	router := routes.Routes()
 
-	err := http.ListenAndServe(os.Getenv("HOST_ADDRESS")+":"+os.Getenv("PORT"), nil)
+	err := http.ListenAndServe(os.Getenv("HOST_ADDRESS")+":"+os.Getenv("PORT"), router)
 	if err != nil {
 		fmt.Println(err)
 	}

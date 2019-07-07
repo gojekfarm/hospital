@@ -87,7 +87,7 @@ func GetLogs() ([]*Logs, error) {
 	logs := make([]*Logs, 0)
 
 	rows, err := db.Query(
-		`SELECT  application_id, script, status, logs FROM operations`)
+		`SELECT  id, application_id, script, status, logs FROM operations ORDER BY id DESC`)
 	if err != nil {
 		return logs, err
 	}
@@ -95,25 +95,114 @@ func GetLogs() ([]*Logs, error) {
 
 	for rows.Next() {
 		var (
+			id            string
 			applicationID string
 			script        string
 			status        string
 			log           string
 		)
 
-		if err := rows.Scan(&applicationID, &script, &status, &log); err != nil {
+		if err := rows.Scan(&id, &applicationID, &script, &status, &log); err != nil {
 			return logs, err
 		}
-		logs = append(logs, &Logs{applicationID, script, status, log})
+		if size := len(log); size > 50 {
+			log = log[size-50:] + "..."
+		}
+		logs = append(logs, &Logs{id, applicationID, script, status, log})
 	}
 
 	return logs, nil
 }
 
+// GetOneLog return one log.
+func GetOneLog(id string) (string, error) {
+	var logs string
+	err := db.QueryRow(
+		`SELECT logs FROM operations where id = $1`, id).Scan(&logs)
+
+	return logs, err
+}
+
+// GetSummary for getting all ApplicationID Summary.
+func GetSummary() (map[string]*Summary, error) {
+	summaries := make(map[string](*Summary))
+	logs, err := GetLogs()
+	if err != nil {
+		return summaries, err
+	}
+
+	for _, log := range logs {
+		if _, ok := summaries[log.ApplicationID]; !ok {
+			summaries[log.ApplicationID] = &Summary{log.ApplicationID, 0, 0, 0}
+		}
+
+		if log.Status == "completed" {
+			summaries[log.ApplicationID].Success++
+		} else if log.Status == "failed" {
+			summaries[log.ApplicationID].Fail++
+		} else {
+			summaries[log.ApplicationID].Firing++
+		}
+
+	}
+
+	return summaries, nil
+}
+
+// GetOneSummary return summary of one application id
+func GetOneSummary(applicationID string) (Summary, []*Logs, error) {
+	logs := make([]*Logs, 0)
+	summary := Summary{applicationID, 0, 0, 0}
+
+	rows, err := db.Query(
+		`SELECT  id, script, status, logs FROM operations where application_id = $1 ORDER BY id DESC`,
+		applicationID)
+	if err != nil {
+		return summary, logs, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var (
+			id     string
+			script string
+			status string
+			log    string
+		)
+		if err := rows.Scan(&id, &script, &status, &log); err != nil {
+			return summary, logs, err
+		}
+
+		if size := len(log); size > 50 {
+			log = log[size-50:] + "..."
+		}
+		logs = append(logs, &Logs{id, applicationID, script, status, log})
+
+		if status == "completed" {
+			summary.Success++
+		} else if status == "failed" {
+			summary.Fail++
+		} else {
+			summary.Firing++
+		}
+	}
+
+	return summary, logs, nil
+}
+
 // Logs struct for getting all entries in table.
 type Logs struct {
+	ID            string
 	ApplicationID string
 	Script        string
 	Status        string
 	Logs          string
+}
+
+// Summary struct for getting all ApplicationID Summary.
+type Summary struct {
+	ApplicationID string
+	Success       int
+	Fail          int
+	Firing        int
 }
