@@ -49,9 +49,11 @@ func slackReport(applicationID, alertname, status, logs string, id int) {
 		Value: alertname,
 		Short: true})
 
+	hospitaURL := os.Getenv("HOSTED_ADDRESS")
+
 	if size := len(logs); size > 50 {
 		logs = logs[size-50:]
-		logs += "<" + webhookURL + "/dashboard/logs/" + strconv.Itoa(id) + ">"
+		logs += "<" + hospitaURL + "/dashboard/logs/" + strconv.Itoa(id) + ">"
 	}
 
 	if logs == "" {
