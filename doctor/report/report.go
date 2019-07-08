@@ -51,8 +51,8 @@ func slackReport(applicationID, alertname, status, logs string, id int) {
 
 	hospitaURL := os.Getenv("HOSTED_ADDRESS")
 
-	if size := len(logs); size > 50 {
-		logs = logs[size-50:]
+	if size := len(logs); size > 150 {
+		logs = "..." + logs[size-150:]
 		logs += "<" + hospitaURL + "/dashboard/logs/" + strconv.Itoa(id) + ">"
 	}
 
@@ -61,7 +61,7 @@ func slackReport(applicationID, alertname, status, logs string, id int) {
 	}
 
 	attachment1.addField(field{Title: "Logs",
-		Value: "`" + "`" + "`" + logs + "`" + "`" + "`",
+		Value: logs,
 		Short: false})
 
 	payloadSent := payload{

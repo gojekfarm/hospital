@@ -106,7 +106,7 @@ func GetLogs() ([]*Logs, error) {
 			return logs, err
 		}
 		if size := len(log); size > 50 {
-			log = log[size-50:] + "..."
+			log = "..." + log[size-50:]
 		}
 		logs = append(logs, &Logs{id, applicationID, script, status, log})
 	}
@@ -174,7 +174,7 @@ func GetOneSummary(applicationID string) (Summary, []*Logs, error) {
 		}
 
 		if size := len(log); size > 50 {
-			log = log[size-50:] + "..."
+			log = "..." + log[size-50:]
 		}
 		logs = append(logs, &Logs{id, applicationID, script, status, log})
 
