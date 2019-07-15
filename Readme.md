@@ -24,7 +24,7 @@ Let's say you've a server with load balancer (HAProxy) and clients are having ti
 * **Hospital**
 * *Surgeon*
   
-![Image](Images/architecture.jpg "Architecture Diagram")
+![Image](Images/architecture.png "Architecture Diagram")
 
 ## Working Overview
 
