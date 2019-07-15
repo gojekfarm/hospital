@@ -35,7 +35,7 @@ func Routes() *mux.Router {
 	router.HandleFunc("/dashboard/logs", dashboard.HandleLogs)
 	router.HandleFunc("/dashboard/logs/{id}", dashboard.HandleOneLog)
 	router.HandleFunc("/dashboard/insert", dashboard.HandleInsert)
-	router.HandleFunc("/dashboard/remove/", dashboard.HandleRemove)
+	router.HandleFunc("/dashboard/remove/{alertType}", dashboard.HandleRemove)
 	router.HandleFunc("/dashboard/summary", dashboard.HandleSummary)
 	router.HandleFunc("/dashboard/summary/{id}", dashboard.HandleOneSummary)
 

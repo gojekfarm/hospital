@@ -26,7 +26,10 @@ func HandleLogs(w http.ResponseWriter, r *http.Request) {
 		logs,
 	}
 
-	t.Execute(w, resp)
+	err = t.Execute(w, resp)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
 }
 
 // HandleOneLog for one log
