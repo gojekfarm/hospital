@@ -26,7 +26,10 @@ func HandleSummary(w http.ResponseWriter, r *http.Request) {
 		summaries,
 	}
 
-	t.Execute(w, resp)
+	err = t.Execute(w, resp)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
 }
 
 // HandleOneSummary handle one summary
@@ -50,5 +53,8 @@ func HandleOneSummary(w http.ResponseWriter, r *http.Request) {
 		logs,
 	}
 
-	t.Execute(w, resp)
+	err = t.Execute(w, resp)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
 }

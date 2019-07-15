@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"text/template"
+
+	"github.com/gorilla/mux"
 )
 
 // HandleDashboard for dashboard.
@@ -24,12 +26,18 @@ func HandleDashboard(w http.ResponseWriter, r *http.Request) {
 		mappings,
 	}
 
-	t.Execute(w, resp)
+	err = t.Execute(w, resp)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
 }
 
 // HandleInsert for adding mapings.
 func HandleInsert(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	}
 
 	if r.FormValue("alert") != "" && r.FormValue("script") != "" {
 		err := storage.InsertScript(r.FormValue("alert"), r.FormValue("script"))
@@ -44,7 +52,8 @@ func HandleInsert(w http.ResponseWriter, r *http.Request) {
 
 // HandleRemove for removing a mapping.
 func HandleRemove(w http.ResponseWriter, r *http.Request) {
-	alertType := r.URL.Path[18:]
+	params := mux.Vars(r)
+	alertType := params["alertType"]
 
 	err := storage.DeleteMapping(alertType)
 
