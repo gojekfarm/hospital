@@ -35,4 +35,4 @@ On any VM, services will expose it's metrics. A Monitoring (Prometheus) agent wi
 * Prometheus (Monitoring Agent)
 * Alert Manager with web-hook to Hospital Api
 * A server for deploying **Hospital**
-* *Surgeon* on each system able to poll *Hospital* and run script on on that system.
+* *Surgeon* on each system able to poll *Hospital* and run script on that system.
