@@ -1,5 +1,7 @@
 # Hospital
 
+[![Build Status](https://travis-ci.org/gojekfarm/hospital.svg?branch=master)](https://travis-ci.org/gojekfarm/hospital)
+
 ## Table of contents
 
   * [Introduction](#introduction)
@@ -23,7 +25,7 @@ Let's say you've a server with load balancer (HAProxy) and clients are having ti
 * Alert Manager
 * **Hospital**
 * *Surgeon*
-  
+
 ![Image](Images/architecture.png "Architecture Diagram")
 
 ## Working Overview
