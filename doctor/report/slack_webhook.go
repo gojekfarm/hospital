@@ -1,7 +1,5 @@
 package report
 
-import()
-
 type field struct {
 	Title string `json:"title"`
 	Value string `json:"value"`
@@ -9,10 +7,10 @@ type field struct {
 }
 
 type action struct {
-	Type	string   `json:"type"`
-	Text	string   `json:"text"`
-	URL 	string   `json:"url"`
-	Style 	string   `json:"style"`
+	Type  string `json:"type"`
+	Text  string `json:"text"`
+	URL   string `json:"url"`
+	Style string `json:"style"`
 }
 
 type attachment struct {
@@ -52,10 +50,5 @@ type payload struct {
 
 func (attachment *attachment) addField(field field) *attachment {
 	attachment.Fields = append(attachment.Fields, &field)
-	return attachment
-}
-
-func (attachment *attachment) addAction(action action) *attachment {
-	attachment.Actions = append(attachment.Actions, &action)
 	return attachment
 }
