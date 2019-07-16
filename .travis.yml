@@ -1,0 +1,72 @@
+dist: xenial
+
+language: go
+
+go:
+  - 1.12.x
+
+stages:
+  - lint_test_package
+
+env:
+  global:
+    - GO111MODULE=on
+    - DB_HOST="localhost"
+    - DB_PORT="5432"
+    - DB_USER="postgres"
+    - DB_PASS=""
+    - DB_NAME="hospital"
+    - PORT=8080
+    - HOST_ADDRESS="localhost"
+    - HOST_PROTOCOL="http"
+
+    - DB_MAX_OPEN_CONN="5"
+    - DB_MAX_IDLE_CONN="5"
+
+    - REQUEST_TIMEOUT_SECONDS="30"
+    - QUERY_INTERVAL_SECONDS="5"
+
+    - SLACK_URL="<slack_url>"
+
+    - APPLICATION_ID="haproxy12"
+    - POLLING_WAIT_SECONDS="5"
+    - MAX_EXPONENTIAL_WAIT="1000"
+
+    - DOCKER_ORG="gojekfarm"
+
+cache:
+  directories:
+    - $HOME/.cache/go-build
+    - $HOME/gopath/pkg/mod
+    - docker
+
+jobs:
+  include:
+    - stage: lint_test_package
+      before_script:
+        - go install github.com/golangci/golangci-lint/cmd/golangci-lint
+      script:
+        - golangci-lint run
+
+    - stage: lint_test_package
+      services:
+        - postgresql
+      addons:
+        postgresql: "10"
+      before_script:
+        - psql -c "create database ${DB_NAME};" -U ${DB_USER}
+        - go build
+        - ./hospital migrate
+      script:
+        - go test -v -race ./...
+
+    - stage: lint_test_package
+      services:
+        - docker
+      before-script:
+        - gzip -dc docker/busybox.tar.gz | docker load
+      script:
+        - commit=$(git rev-parse HEAD)
+        - docker build -t $DOCKER_ORG/hospital:$commit .
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker push $DOCKER_ORG/hospital:$commit
